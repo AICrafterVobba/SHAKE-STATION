@@ -9,8 +9,8 @@
 :root {
   box-sizing: border-box;
   --space: #050614;
-  --panel: rgba(20, 27, 48, 0.92);
-  --panel-border: rgba(127, 209, 192, 0.4);
+  --panel: rgba(20, 27, 48, 0.95);
+  --panel-border: rgba(127, 209, 192, 0.5);
   --cream: #fffaed;
   --orange: #ff9f1c;
   --orange-glow: rgba(255, 159, 28, 0.6);
@@ -37,7 +37,7 @@ html, body {
   color: #fff;
   font: 16px/1.5 Nunito, system-ui, sans-serif;
   overflow: hidden;
-  position: relative;
+  position: fixed;
 }
 
 h1, h2, h3, button, .o {
@@ -69,15 +69,16 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   display: none;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 16px;
-  background: radial-gradient(circle at 50% 50%, rgba(20,27,48,0.4) 0%, rgba(5,6,20,0.95) 100%);
+  padding: 12px;
+  background: radial-gradient(circle at 50% 50%, rgba(20,27,48,0.5) 0%, rgba(5,6,20,0.98) 100%);
   width: 100%;
   height: 100%;
+  height: 100dvh;
 }
-.scr.on { display: flex; flex-direction: column; justify-content: center; align-items: center; animation: sciFiIris 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.scr.on { display: flex; flex-direction: column; justify-content: center; align-items: center; animation: sciFiIris 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
 @keyframes sciFiIris {
-  from { transform: scale(0.92); opacity: 0; filter: blur(6px); }
+  from { transform: scale(0.95); opacity: 0; filter: blur(4px); }
   to { transform: scale(1); opacity: 1; filter: blur(0); }
 }
 
@@ -88,7 +89,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   border: 2px solid var(--panel-border);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.2);
   border-radius: 16px;
-  padding: 16px 20px;
+  padding: 14px 18px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .panel:hover {
@@ -96,47 +97,48 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   box-shadow: 0 20px 45px rgba(46, 196, 182, 0.25), inset 0 1px 4px rgba(255, 255, 255, 0.4);
 }
 
+/* Fix Button Text Contrast and Readability */
 .btn {
   border: 0;
   background: linear-gradient(135deg, var(--sun) 0%, var(--orange) 100%);
-  color: #023047;
+  color: #011627 !important;
   font-weight: 900;
-  min-height: 48px;
+  min-height: 50px;
   min-width: 140px;
   padding: 12px 20px;
   font-size: 15px;
   border-radius: 12px;
-  box-shadow: 0 8px 25px rgba(255, 159, 28, 0.4), inset 0 3px 0 rgba(255, 255, 255, 0.6), inset 0 -4px 0 rgba(180, 80, 0, 0.5);
+  box-shadow: 0 8px 25px rgba(255, 159, 28, 0.5), inset 0 3px 0 rgba(255, 255, 255, 0.8), inset 0 -4px 0 rgba(160, 60, 0, 0.6);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  text-shadow: 0 1px 0 rgba(255,255,255,0.4);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.6);
 }
 .btn:hover {
   filter: brightness(1.1);
   transform: translateY(-2px) scale(1.01);
-  box-shadow: 0 10px 28px var(--orange-glow), inset 0 3px 0 rgba(255, 255, 255, 0.8), inset 0 -4px 0 rgba(180, 80, 0, 0.5);
+  box-shadow: 0 10px 28px var(--orange-glow), inset 0 3px 0 rgba(255, 255, 255, 0.9), inset 0 -4px 0 rgba(160, 60, 0, 0.6);
 }
 .btn:active { transform: translateY(2px) scale(0.98); box-shadow: 0 4px 12px var(--orange-glow); }
 .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; filter: grayscale(0.5); }
-.btn.big { min-height: 56px; font-size: 18px; width: 100%; border-radius: 16px; }
+.btn.big { min-height: 58px; font-size: 17px; width: 100%; border-radius: 16px; color: #011627 !important; text-shadow: 0 1px 0 rgba(255,255,255,0.7); }
 .btn.sec {
-  background: rgba(142, 202, 230, 0.1);
-  color: var(--ice);
+  background: rgba(142, 202, 230, 0.15);
+  color: #fff !important;
   box-shadow: inset 0 0 0 2px var(--ice), 0 4px 15px rgba(0,0,0,0.3);
-  text-shadow: 0 0 10px rgba(142, 202, 230, 0.6);
+  text-shadow: 0 0 10px rgba(142, 202, 230, 0.8);
 }
-.btn.sec:hover { background: rgba(142, 202, 230, 0.2); color: #fff; box-shadow: inset 0 0 0 2px var(--teal), 0 6px 20px rgba(46,196,182,0.4); }
+.btn.sec:hover { background: rgba(142, 202, 230, 0.3); color: #fff; box-shadow: inset 0 0 0 2px var(--teal), 0 6px 20px rgba(46,196,182,0.4); }
 
 .cen { max-width: 980px; margin: 0 auto; width: 100%; max-height: 95vh; overflow-y: auto; }
 
 .tabs {
   display: flex;
-  gap: 16px;
+  gap: 12px;
   border-bottom: 2px solid rgba(142, 202, 230, 0.3);
-  padding-bottom: 10px;
+  padding-bottom: 8px;
   font: 800 14px Orbitron, sans-serif;
   color: var(--ice);
   flex-wrap: wrap;
@@ -148,75 +150,75 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 /* Boot & Loading */
 #boot { background: #02030a; }
 #boot.on { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-.bl { font: 15px/1.8 "Courier New", monospace; color: var(--teal); text-align: left; min-height: 140px; width: min(440px, 92%); background: rgba(0,0,0,0.6); padding: 16px; border-radius: 12px; border: 1px solid var(--teal); box-shadow: 0 0 20px rgba(46,196,182,0.2); }
-.logo { font: 900 clamp(38px, 9vw, 76px)/.95 Orbitron, sans-serif; color: var(--cream); text-shadow: 0 0 30px var(--orange-glow), 4px 4px 0 var(--red), -4px -4px 0 var(--shield); margin: 20px 0; opacity: 0; transform: scale(0.9); transition: all 0.5s; }
+.bl { font: 14px/1.8 "Courier New", monospace; color: var(--teal); text-align: left; min-height: 130px; width: min(420px, 92%); background: rgba(0,0,0,0.7); padding: 14px; border-radius: 12px; border: 1px solid var(--teal); box-shadow: 0 0 20px rgba(46,196,182,0.2); }
+.logo { font: 900 clamp(32px, 8vw, 70px)/.95 Orbitron, sans-serif; color: var(--cream); text-shadow: 0 0 30px var(--orange-glow), 3px 3px 0 var(--red), -3px -3px 0 var(--shield); margin: 16px 0; opacity: 0; transform: scale(0.9); transition: all 0.5s; }
 .logo.on { opacity: 1; transform: scale(1); }
-.tap { color: var(--sun); font-size: 18px; font-weight: 800; animation: blinkTap 1.2s infinite; opacity: 0; margin-top: 20px; text-shadow: 0 0 12px var(--sun); }
+.tap { color: #011627 !important; font-size: 17px; font-weight: 900; animation: blinkTap 1.2s infinite; opacity: 0; margin-top: 16px; text-shadow: none; background: linear-gradient(135deg, var(--sun) 0%, var(--orange) 100%); }
 .tap.on { opacity: 1; }
-@keyframes blinkTap { 50% { opacity: 0.3; transform: scale(0.98); } }
-.foot { color: var(--ice); font-size: 13px; opacity: 0.7; margin-top: 24px; text-align: center; padding: 0 10px; }
+@keyframes blinkTap { 50% { opacity: 0.4; transform: scale(0.98); } }
+.foot { color: var(--ice); font-size: 12px; opacity: 0.7; margin-top: 20px; text-align: center; padding: 0 10px; }
 
-#loading.on { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; text-align: center; }
-.ring { width: 140px; height: 140px; border: 3px solid rgba(142,202,230,0.2); border-top-color: var(--teal); border-radius: 50%; position: relative; animation: spinRing 2s linear infinite; box-shadow: 0 0 30px rgba(46,196,182,0.3); }
-.ring i { position: absolute; top: -10px; left: 60px; width: 20px; height: 20px; border-radius: 50%; background: var(--sun); box-shadow: 0 0 20px var(--sun); }
-.ring::after { content: ""; position: absolute; inset: 30px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #e76f51, #9d0208); }
+#loading.on { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center; }
+.ring { width: 120px; height: 120px; border: 3px solid rgba(142,202,230,0.2); border-top-color: var(--teal); border-radius: 50%; position: relative; animation: spinRing 2s linear infinite; box-shadow: 0 0 30px rgba(46,196,182,0.3); }
+.ring i { position: absolute; top: -10px; left: 50px; width: 18px; height: 18px; border-radius: 50%; background: var(--sun); box-shadow: 0 0 20px var(--sun); }
+.ring::after { content: ""; position: absolute; inset: 26px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #e76f51, #9d0208); }
 @keyframes spinRing { to { transform: rotate(360deg); } }
-.segs { display: flex; gap: 6px; width: min(380px, 90%); }
-.segs b { flex: 1; height: 16px; background: rgba(142,202,230,0.15); border-radius: 4px; border: 1px solid rgba(142,202,230,0.3); }
+.segs { display: flex; gap: 6px; width: min(360px, 90%); }
+.segs b { flex: 1; height: 14px; background: rgba(142,202,230,0.15); border-radius: 4px; border: 1px solid rgba(142,202,230,0.3); }
 .segs b.f { background: linear-gradient(90deg, var(--teal), var(--shield)); box-shadow: 0 0 12px var(--teal); }
-.st { font: 14px/1.8 "Courier New", monospace; color: var(--ice); min-height: 70px; }
-.tip { max-width: 440px; min-height: 80px; border-left: 5px solid var(--sun); }
+.st { font: 13px/1.7 "Courier New", monospace; color: var(--ice); min-height: 60px; }
+.tip { max-width: 420px; min-height: 75px; border-left: 5px solid var(--sun); }
 .tag { display: inline-block; background: var(--sun); color: #023047; font: 900 11px Orbitron, sans-serif; padding: 3px 10px; border-radius: 6px; margin-right: 8px; }
 
 /* Home Grid & Tables */
-.hg { display: grid; gap: 16px; grid-template-columns: 1fr; margin-top: 16px; }
-@media(min-width: 760px) { .hg { grid-template-columns: 240px 1fr 320px; align-items: center; } }
-.sites { display: grid; gap: 12px; }
-.site { background: rgba(20, 27, 48, 0.6); border: 2px solid var(--panel-border); padding: 16px; text-align: left; font-weight: 800; font-size: 14px; color: var(--ice); border-radius: 12px; transition: all 0.2s; min-height: 48px; }
+.hg { display: grid; gap: 14px; grid-template-columns: 1fr; margin-top: 14px; }
+@media(min-width: 760px) { .hg { grid-template-columns: 220px 1fr 300px; align-items: center; } }
+.sites { display: grid; gap: 10px; }
+.site { background: rgba(20, 27, 48, 0.6); border: 2px solid var(--panel-border); padding: 14px; text-align: left; font-weight: 800; font-size: 13px; color: var(--ice); border-radius: 12px; transition: all 0.2s; min-height: 46px; }
 .site.sel { background: linear-gradient(135deg, var(--teal), var(--shield)); color: #023047; border-color: #fff; box-shadow: 0 0 25px rgba(46,196,182,0.5); transform: scale(1.02); }
 .site small { display: block; font: 700 11px Nunito; opacity: 0.9; margin-top: 3px; }
 .orbv { display: grid; place-items: center; }
-.pn h2 { margin: 0 0 8px; color: var(--cream); font-size: 24px; }
-.chip { display: inline-block; background: rgba(142,202,230,0.15); border: 1px solid var(--ice); padding: 3px 10px; border-radius: 6px; margin: 3px; font-size: 12px; color: var(--ice); font-weight: 700; }
-.hb { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; justify-content: center; }
+.pn h2 { margin: 0 0 8px; color: var(--cream); font-size: 22px; }
+.chip { display: inline-block; background: rgba(142,202,230,0.15); border: 1px solid var(--ice); padding: 3px 10px; border-radius: 6px; margin: 3px; font-size: 11px; color: var(--ice); font-weight: 700; }
+.hb { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; justify-content: center; }
 
-.card { max-width: 660px; margin: auto; text-align: left; width: 100%; max-height: 90vh; overflow-y: auto; }
-.card h2 { color: var(--cream); margin: 0 0 12px; font-size: 24px; }
-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; border-radius: 10px; overflow: hidden; border: 1px solid var(--panel-border); }
-td, th { padding: 10px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid rgba(142,202,230,0.15); border-right: 1px solid rgba(142,202,230,0.15); }
+.card { max-width: 640px; margin: auto; text-align: left; width: 100%; max-height: 88vh; overflow-y: auto; }
+.card h2 { color: var(--cream); margin: 0 0 10px; font-size: 22px; }
+table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 12px; border-radius: 10px; overflow: hidden; border: 1px solid var(--panel-border); }
+td, th { padding: 9px 11px; text-align: left; vertical-align: top; border-bottom: 1px solid rgba(142,202,230,0.15); border-right: 1px solid rgba(142,202,230,0.15); }
 th { background: rgba(2, 48, 71, 0.8); font-family: Orbitron, sans-serif; font-size: 11px; color: var(--sun); letter-spacing: 1px; }
 .live { color: #2ec4b6; font-weight: 900; }
 .snap { color: var(--sun); font-weight: 900; }
-.nm { width: 100%; padding: 14px; font-size: 18px; font-family: Orbitron, sans-serif; background: rgba(5,6,20,0.9); color: var(--sun); border: 2px solid var(--teal); border-radius: 10px; margin: 10px 0; }
+.nm { width: 100%; padding: 12px; font-size: 17px; font-family: Orbitron, sans-serif; background: rgba(5,6,20,0.9); color: var(--sun); border: 2px solid var(--teal); border-radius: 10px; margin: 8px 0; }
 
 /* Settings / Crew Audio Controls & Difficulty & Autopilot Styling */
-.settings-group { margin: 12px 0; background: rgba(255,255,255,0.04); padding: 12px; border-radius: 10px; border: 1px solid var(--panel-border); }
-.settings-group label { display: flex; justify-content: space-between; align-items: center; font-weight: 700; color: var(--cream); cursor: pointer; margin: 8px 0; min-height: 44px; }
-.settings-group input[type="range"] { width: 50%; accent-color: var(--sun); cursor: pointer; min-height: 44px; }
-.settings-group input[type="checkbox"] { width: 24px; height: 24px; accent-color: var(--teal); cursor: pointer; }
-.settings-group select { background: #0f1020; color: #fff; border: 2px solid var(--teal); padding: 8px 14px; border-radius: 6px; font-family: Orbitron; min-height: 44px; }
+.settings-group { margin: 10px 0; background: rgba(255,255,255,0.04); padding: 10px; border-radius: 10px; border: 1px solid var(--panel-border); }
+.settings-group label { display: flex; justify-content: space-between; align-items: center; font-weight: 700; color: var(--cream); cursor: pointer; margin: 6px 0; min-height: 40px; }
+.settings-group input[type="range"] { width: 50%; accent-color: var(--sun); cursor: pointer; min-height: 40px; }
+.settings-group input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--teal); cursor: pointer; }
+.settings-group select { background: #0f1020; color: #fff; border: 2px solid var(--teal); padding: 6px 12px; border-radius: 6px; font-family: Orbitron; min-height: 40px; }
 
-/* Cockpit HUD & Notification Center Button */
-.gw { max-width: 980px; margin: auto; display: grid; gap: 8px; width: 100%; height: 100%; max-height: 100%; overflow-y: auto; padding: 10px 0; }
-.top { display: flex; gap: 12px; align-items: stretch; flex-wrap: wrap; }
-.tl { flex: 1; display: flex; gap: 4px; align-items: flex-end; padding: 10px 14px; background: var(--panel); border-radius: 14px; border: 2px solid var(--panel-border); box-shadow: inset 0 0 20px rgba(0,0,0,0.5); min-width: 280px; overflow-x: auto; }
-.tl div { flex: 1; text-align: center; font: 800 11px Orbitron, sans-serif; border-bottom: 6px solid rgba(142,202,230,0.2); padding-bottom: 4px; color: var(--ice); min-height: 40px; border-radius: 3px 3px 0 0; min-width: 28px; }
+/* Cockpit HUD & Notification Center Button - Perfectly Fit for Mobile/PC */
+.gw { max-width: 980px; margin: auto; display: flex; flex-direction: column; gap: 6px; width: 100%; height: 100%; max-height: 100%; overflow-y: auto; padding: 4px 0; }
+.top { display: flex; gap: 10px; align-items: stretch; flex-wrap: wrap; }
+.tl { flex: 1; display: flex; gap: 4px; align-items: flex-end; padding: 8px 12px; background: var(--panel); border-radius: 12px; border: 2px solid var(--panel-border); box-shadow: inset 0 0 20px rgba(0,0,0,0.5); min-width: 260px; overflow-x: auto; }
+.tl div { flex: 1; text-align: center; font: 800 10px Orbitron, sans-serif; border-bottom: 5px solid rgba(142,202,230,0.2); padding-bottom: 3px; color: var(--ice); min-height: 36px; border-radius: 3px 3px 0 0; min-width: 26px; }
 .tl .dn { border-color: rgba(255,255,255,0.1); color: rgba(255,255,255,0.3); background: rgba(0,0,0,0.2); }
-.tl .td { border-color: var(--sun); color: var(--sun); background: rgba(255,183,3,0.15); text-shadow: 0 0 10px var(--sun); transform: scale(1.06); }
+.tl .td { border-color: var(--sun); color: var(--sun); background: rgba(255,183,3,0.15); text-shadow: 0 0 10px var(--sun); transform: scale(1.05); }
 .tl .wn { color: var(--red); border-color: var(--red); }
 
-.orb { min-width: 150px; text-align: center; padding: 8px 12px; font: 800 12px Orbitron, sans-serif; color: var(--cream); background: var(--panel); border-radius: 14px; border: 2px solid var(--panel-border); display: flex; flex-direction: column; justify-content: center; align-items: center; }
-.orb span { font-size: 30px; display: block; }
+.orb { min-width: 140px; text-align: center; padding: 6px 10px; font: 800 11px Orbitron, sans-serif; color: var(--cream); background: var(--panel); border-radius: 12px; border: 2px solid var(--panel-border); display: flex; flex-direction: column; justify-content: center; align-items: center; }
+.orb span { font-size: 26px; display: block; }
 
 .stage {
   position: relative;
   border: 3px solid var(--teal);
   overflow: hidden;
   background: #0b0c1e;
-  border-radius: 18px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.8), inset 0 0 40px rgba(46,196,182,0.2);
+  border-radius: 16px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.8), inset 0 0 30px rgba(46,196,182,0.2);
 }
-#sc { display: block; width: 100%; height: auto; aspect-ratio: 16/9; max-height: 38vh; object-fit: cover; }
+#sc { display: block; width: 100%; height: auto; aspect-ratio: 16/9; max-height: 34vh; object-fit: cover; }
 
 .shake { animation: sciFiShake 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; }
 @keyframes sciFiShake {
@@ -226,110 +228,109 @@ th { background: rgba(2, 48, 71, 0.8); font-family: Orbitron, sans-serif; font-s
 }
 
 /* Smart Notification Center & Toasts */
-#toasts { position: absolute; left: 14px; top: 14px; display: grid; gap: 8px; max-width: 75%; z-index: 10; pointer-events: none; }
+#toasts { position: absolute; left: 12px; top: 12px; display: grid; gap: 6px; max-width: 75%; z-index: 10; pointer-events: none; }
 .toast {
   background: rgba(16, 23, 53, 0.95);
   backdrop-filter: blur(10px);
-  border-left: 6px solid var(--sun);
-  border-radius: 0 10px 10px 0;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.6), 0 0 15px rgba(255,183,3,0.3);
-  padding: 10px 16px;
-  font: 800 13px Orbitron, sans-serif;
+  border-left: 5px solid var(--sun);
+  border-radius: 0 8px 8px 0;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 12px rgba(255,183,3,0.3);
+  padding: 8px 14px;
+  font: 800 12px Orbitron, sans-serif;
   color: #fff;
   animation: slideInToast 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-.toast.r { border-color: var(--red); box-shadow: 0 8px 25px rgba(0,0,0,0.6), 0 0 20px rgba(255,51,102,0.5); }
+.toast.r { border-color: var(--red); box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 16px rgba(255,51,102,0.5); }
 @keyframes slideInToast { from { transform: translateX(-120%) scale(0.9); opacity: 0; } to { transform: translateX(0) scale(1); opacity: 1; } }
 
 .notif-btn {
   position: absolute;
-  top: 14px;
-  right: 14px;
+  top: 10px;
+  right: 10px;
   background: var(--dark-blue);
   border: 2px solid var(--teal);
   color: var(--sun);
-  padding: 10px 16px;
-  border-radius: 10px;
-  font: 800 12px Orbitron, sans-serif;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font: 800 11px Orbitron, sans-serif;
   cursor: pointer;
   z-index: 12;
-  min-height: 44px;
-  box-shadow: 0 0 15px rgba(46,196,182,0.4);
+  min-height: 40px;
+  box-shadow: 0 0 12px rgba(46,196,182,0.4);
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
 }
 .notif-btn:hover { background: var(--teal); color: var(--dark-blue); }
-.badge { background: var(--red); color: #fff; border-radius: 50%; padding: 2px 6px; font-size: 10px; font-weight: 900; }
+.badge { background: var(--red); color: #fff; border-radius: 50%; padding: 2px 5px; font-size: 9px; font-weight: 900; }
 
-.pc { font-size: 14px; color: var(--cream); padding: 10px 16px; font-weight: 700; background: var(--panel); border-radius: 14px; border: 2px solid var(--panel-border); }
+.pc { font-size: 13px; color: var(--cream); padding: 8px 14px; font-weight: 700; background: var(--panel); border-radius: 12px; border: 2px solid var(--panel-border); }
 #flash { position: absolute; inset: 0; background: radial-gradient(circle, #ffffff 0%, var(--sun) 60%, var(--orange) 100%); opacity: 0; pointer-events: none; z-index: 5; }
 .fl { animation: flashBurst 0.7s; }
 @keyframes flashBurst { 25% { opacity: 0.95; } to { opacity: 0; } }
 
 /* Resource Docks */
-.dock { display: grid; grid-template-columns: repeat(1, 1fr); gap: 10px; }
-@media(min-width: 500px) { .dock { grid-template-columns: repeat(2, 1fr); } }
+.dock { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
 @media(min-width: 760px) { .dock { grid-template-columns: repeat(4, 1fr); } }
 
 .dk {
   text-align: center;
-  padding: 10px 8px;
+  padding: 8px 6px;
   background: var(--panel);
   border: 2px solid var(--panel-border);
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  border-radius: 14px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
   transition: all 0.25s;
 }
-.dk:hover { border-color: var(--teal); transform: translateY(-4px); }
-.dk .ic { font-size: 28px; }
-.dk b { display: block; font: 900 12px Orbitron, sans-serif; color: var(--sun); margin-top: 4px; }
+.dk:hover { border-color: var(--teal); transform: translateY(-3px); }
+.dk .ic { font-size: 24px; }
+.dk b { display: block; font: 900 11px Orbitron, sans-serif; color: var(--sun); margin-top: 3px; }
 
-.mt { display: flex; gap: 4px; margin: 6px 8px; }
-.mt i { flex: 1; height: 8px; background: rgba(255,255,255,0.1); border-radius: 3px; border: 1px solid rgba(255,255,255,0.15); }
+.mt { display: flex; gap: 3px; margin: 4px 6px; }
+.mt i { flex: 1; height: 6px; background: rgba(255,255,255,0.1); border-radius: 2px; border: 1px solid rgba(255,255,255,0.15); }
 
-.ct { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 4px 0; }
+.ct { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 3px 0; }
 .ct button {
-  width: 38px; height: 38px;
+  width: 34px; height: 34px;
   border: 2px solid var(--teal);
   background: rgba(46, 196, 182, 0.15);
   color: var(--cream);
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 900;
-  border-radius: 8px;
+  border-radius: 7px;
 }
 .ct button:hover:not(:disabled) { background: var(--teal); color: #023047; }
 .ct button:disabled { opacity: 0.25; border-color: rgba(255,255,255,0.1); background: transparent; }
-.ct span { font: 900 22px Orbitron; min-width: 28px; color: var(--sun); }
-.dk small { display: block; color: var(--ice); font-size: 10px; min-height: 28px; margin-top: 4px; font-weight: 700; }
+.ct span { font: 900 18px Orbitron; min-width: 24px; color: var(--sun); }
+.dk small { display: block; color: var(--ice); font-size: 9px; min-height: 24px; margin-top: 3px; font-weight: 700; }
 
-.bar { display: grid; gap: 12px; grid-template-columns: 1fr; }
-@media(min-width: 700px) { .bar { grid-template-columns: 1fr 360px; align-items: center; } }
+.bar { display: grid; gap: 10px; grid-template-columns: 1fr; }
+@media(min-width: 700px) { .bar { grid-template-columns: 1fr 340px; align-items: center; } }
 
 .batt {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   align-items: center;
-  font: 800 13px Orbitron;
+  font: 800 12px Orbitron;
   color: var(--sun);
   background: var(--panel);
-  padding: 10px 16px;
+  padding: 8px 14px;
   border: 2px solid var(--panel-border);
-  border-radius: 14px;
+  border-radius: 12px;
 }
-.batt b { width: 100%; display: flex; gap: 4px; margin-top: 4px; }
-.batt i { flex: 1; height: 18px; background: rgba(255,255,255,0.1); border-radius: 4px; border: 1px solid rgba(255,255,255,0.15); }
+.batt b { width: 100%; display: flex; gap: 3px; margin-top: 3px; }
+.batt i { flex: 1; height: 14px; background: rgba(255,255,255,0.1); border-radius: 3px; border: 1px solid rgba(255,255,255,0.15); }
 .batt i.f { background: linear-gradient(135deg, var(--sun), var(--orange)); border-color: var(--sun); }
 .batt i.p { background: #b45309; }
 
 .coin {
   position: fixed;
   z-index: 50;
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   background: radial-gradient(circle at 35% 30%, #fff3a0, var(--orange));
-  box-shadow: 0 0 20px var(--sun);
+  box-shadow: 0 0 18px var(--sun);
   pointer-events: none;
 }
 
@@ -341,13 +342,13 @@ th { background: rgba(2, 48, 71, 0.8); font-family: Orbitron, sans-serif; font-s
   backdrop-filter: blur(12px);
   display: none;
   overflow-y: auto;
-  padding: 20px;
+  padding: 16px;
   z-index: 30;
 }
 .ov.on { display: flex; justify-content: center; align-items: center; animation: fadeInModal 0.3s ease-out; }
 @keyframes fadeInModal { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
-.pcw { max-width: 620px; margin: auto; perspective: 1500px; width: 100%; }
+.pcw { max-width: 600px; margin: auto; perspective: 1500px; width: 100%; }
 .flip {
   position: relative;
   width: 100%;
@@ -355,8 +356,8 @@ th { background: rgba(2, 48, 71, 0.8); font-family: Orbitron, sans-serif; font-s
   transform-style: preserve-3d;
   transition: transform 0.8s;
   cursor: pointer;
-  border-radius: 16px;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+  border-radius: 14px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.8);
 }
 .flip.b { transform: rotateY(180deg); }
 .fc, .bk {
@@ -365,43 +366,43 @@ th { background: rgba(2, 48, 71, 0.8); font-family: Orbitron, sans-serif; font-s
   backface-visibility: hidden;
   background: #fdf6e2;
   color: #2c1810;
-  padding: 16px;
-  border: 10px solid #fffaf0;
-  border-radius: 16px;
+  padding: 14px;
+  border: 8px solid #fffaf0;
+  border-radius: 14px;
   overflow-y: auto;
-  font-size: 14px;
+  font-size: 13px;
 }
 .bk { transform: rotateY(180deg); background: #fbf0d9; }
-.fc svg { width: 100%; height: 48%; display: block; border-radius: 8px; }
-.hw { font: 700 21px/1.3 "Patrick Hand", cursive; margin: 8px 0; color: #3a2210; }
+.fc svg { width: 100%; height: 46%; display: block; border-radius: 6px; }
+.hw { font: 700 19px/1.3 "Patrick Hand", cursive; margin: 6px 0; color: #3a2210; }
 .stamp {
-  position: absolute; top: 16px; right: 16px; width: 64px; height: 76px;
-  border: 3px dashed #b8451f; background: #f4dc9b; font: 900 10px Orbitron;
-  text-align: center; padding-top: 8px; color: #b8451f; transform: rotate(5deg);
+  position: absolute; top: 14px; right: 14px; width: 58px; height: 68px;
+  border: 2px dashed #b8451f; background: #f4dc9b; font: 900 9px Orbitron;
+  text-align: center; padding-top: 6px; color: #b8451f; transform: rotate(5deg);
   border-radius: 4px;
 }
-.pm { position: absolute; top: 88px; right: 10px; font: 900 10px Orbitron; color: #8a6a4a; border: 2px solid #8a6a4a; border-radius: 50%; padding: 8px; transform: rotate(-14deg); background: #f8ecd0cc; }
-.ss { display: flex; gap: 8px; flex-wrap: wrap; font: 800 11px Orbitron; margin-top: 8px; }
-.ss span { background: #3a2412; color: #f8ecd0; padding: 3px 8px; border-radius: 4px; }
-.bk h3 { margin: 6px 0 2px; color: #b8451f; font-size: 13px; font-family: Orbitron; }
-.src { font-size: 11px; color: #7a5a3a; margin-top: 4px; }
-.late { background: var(--red); color: #fff; font: 900 10px Orbitron; padding: 2px 8px; border-radius: 4px; }
+.pm { position: absolute; top: 80px; right: 10px; font: 900 9px Orbitron; color: #8a6a4a; border: 2px solid #8a6a4a; border-radius: 50%; padding: 6px; transform: rotate(-14deg); background: #f8ecd0cc; }
+.ss { display: flex; gap: 6px; flex-wrap: wrap; font: 800 10px Orbitron; margin-top: 6px; }
+.ss span { background: #3a2412; color: #f8ecd0; padding: 2px 6px; border-radius: 4px; }
+.bk h3 { margin: 4px 0 2px; color: #b8451f; font-size: 12px; font-family: Orbitron; }
+.src { font-size: 10px; color: #7a5a3a; margin-top: 3px; }
+.late { background: var(--red); color: #fff; font: 900 9px Orbitron; padding: 2px 6px; border-radius: 4px; }
 
-.chain { list-style: none; padding: 0; display: grid; gap: 10px; }
-.chain li { display: flex; gap: 12px; align-items: center; background: rgba(255,255,255,0.06); padding: 10px 14px; border-radius: 10px; }
-.chain .i { font-size: 28px; }
-.patch { display: inline-block; border: 4px solid var(--sun); border-radius: 99px; padding: 8px 24px; color: var(--sun); font: 900 20px Orbitron; background: rgba(255,183,3,0.1); animation: badgePulse 2s infinite ease-in-out; }
-@keyframes badgePulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 15px var(--sun); } 50% { transform: scale(1.05); box-shadow: 0 0 30px var(--orange); } }
+.chain { list-style: none; padding: 0; display: grid; gap: 8px; }
+.chain li { display: flex; gap: 10px; align-items: center; background: rgba(255,255,255,0.06); padding: 8px 12px; border-radius: 8px; }
+.chain .i { font-size: 24px; }
+.patch { display: inline-block; border: 3px solid var(--sun); border-radius: 99px; padding: 6px 20px; color: var(--sun); font: 900 18px Orbitron; background: rgba(255,183,3,0.1); animation: badgePulse 2s infinite ease-in-out; }
+@keyframes badgePulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 12px var(--sun); } 50% { transform: scale(1.05); box-shadow: 0 0 25px var(--orange); } }
 
-.scrap { display: flex; gap: 12px; overflow-x: auto; padding: 10px 0; }
-.scrap div { min-width: 170px; background: #fdf6e2; color: #2c1810; padding: 12px; border-radius: 10px; font-size: 12px; }
+.scrap { display: flex; gap: 10px; overflow-x: auto; padding: 8px 0; }
+.scrap div { min-width: 150px; background: #fdf6e2; color: #2c1810; padding: 10px; border-radius: 8px; font-size: 11px; }
 
 /* Notification Center Modal Specifics */
-.notif-list { display: grid; gap: 10px; margin-top: 12px; max-height: 350px; overflow-y: auto; }
-.notif-item { background: rgba(255,255,255,0.05); border: 1px solid var(--panel-border); padding: 12px; border-radius: 10px; cursor: pointer; transition: all 0.25s; min-height: 48px; }
-.notif-item:hover { background: rgba(46,196,182,0.15); border-color: var(--teal); transform: translateX(4px); }
+.notif-list { display: grid; gap: 8px; margin-top: 10px; max-height: 320px; overflow-y: auto; }
+.notif-item { background: rgba(255,255,255,0.05); border: 1px solid var(--panel-border); padding: 10px; border-radius: 8px; cursor: pointer; transition: all 0.25s; min-height: 44px; }
+.notif-item:hover { background: rgba(46,196,182,0.15); border-color: var(--teal); transform: translateX(3px); }
 .notif-item.unread { border-left: 4px solid var(--sun); }
-.notif-meta { font-size: 11px; color: var(--ice); font-family: Orbitron; margin-bottom: 4px; display: flex; justify-content: space-between; }
+.notif-meta { font-size: 10px; color: var(--ice); font-family: Orbitron; margin-bottom: 3px; display: flex; justify-content: space-between; }
 
 body.rm * { animation-duration: .01s !important; transition-duration: .01s !important; }
 .dust line { stroke: #ffd7a8; stroke-width: 2.5; opacity: 0.75; animation: ds 0.7s linear infinite; }
@@ -435,7 +436,7 @@ body.rm * { animation-duration: .01s !important; transition-duration: .01s !impo
 <section class="scr" id="boot" role="region" aria-label="Boot Screen">
   <div class="bl" id="bootL"></div>
   <div class="logo" id="bootLogo">SHAKE<br>STATION</div>
-  <div class="o" style="color:var(--ice);font-size:14px;font-weight:800;" id="bootTag"></div>
+  <div class="o" style="color:var(--ice);font-size:13px;font-weight:800;" id="bootTag"></div>
   <button class="tap o btn big" id="tapBtn" aria-label="Tap screen to start mission">▶ TAP SCREEN TO START MISSION ◀</button>
   <div class="foot">Made for NASA Space Apps Challenge 2026 · Team Globe Guardians<br>Not an official NASA product</div>
 </section>
@@ -465,7 +466,7 @@ body.rm * { animation-duration: .01s !important; transition-duration: .01s !impo
         <button class="site" disabled>SHACKLETON RIM<small>Moon · Coming soon</small></button>
       </div>
       <div class="orbv">
-        <svg viewBox="0 0 300 300" width="100%" style="max-width:340px" role="img" aria-label="Mars hologram">
+        <svg viewBox="0 0 300 300" width="100%" style="max-width:320px" role="img" aria-label="Mars hologram">
           <defs>
             <radialGradient id="marsGrad" cx="35%" cy="30%" r="70%">
               <stop offset="0%" stop-color="#ff9f1c"/>
@@ -485,8 +486,8 @@ body.rm * { animation-duration: .01s !important; transition-duration: .01s !impo
       <div class="panel pn">
         <h2>GALE CRATER</h2>
         <p>Where Curiosity measured radiation and weather on Mars. Keep Pip safe for 10 sols!</p>
-        <div style="margin-top:8px">NASA data used: <span class="chip">Curiosity RAD</span><span class="chip">DONKI Flares</span></div>
-        <p style="margin:12px 0 0"><button class="btn big" id="play" aria-label="Play Fixed Mission">PLAY FIXED MISSION</button></p>
+        <div style="margin-top:6px">NASA data used: <span class="chip">Curiosity RAD</span><span class="chip">DONKI Flares</span></div>
+        <p style="margin:10px 0 0"><button class="btn big" id="play" aria-label="Play Fixed Mission">PLAY FIXED MISSION</button></p>
       </div>
     </div>
     <div class="hb">
@@ -496,7 +497,7 @@ body.rm * { animation-duration: .01s !important; transition-duration: .01s !impo
       <button class="btn sec" id="hData">DATA & SCIENCE</button>
       <button class="btn sec" id="hLab">MISSION LAB</button>
     </div>
-    <p style="text-align:center;font-size:13px;color:var(--ice);margin-top:16px"><label><input type="checkbox" id="rmChk"> Reduce motion</label> · NASA Space Apps Challenge 2026</p>
+    <p style="text-align:center;font-size:12px;color:var(--ice);margin-top:12px"><label><input type="checkbox" id="rmChk"> Reduce motion</label> · NASA Space Apps Challenge 2026</p>
   </div>
 </section>
 
@@ -504,7 +505,7 @@ body.rm * { animation-duration: .01s !important; transition-duration: .01s !impo
 <section class="scr" id="how" role="region" aria-label="How To Play Screen">
   <div class="card panel">
     <h2 id="hT"></h2>
-    <p id="hP" style="font-size:18px;min-height:90px;color:var(--cream)"></p>
+    <p id="hP" style="font-size:17px;min-height:80px;color:var(--cream)"></p>
     <p class="src" id="hG" style="color:var(--ice)"></p>
     <div class="hb">
       <button class="btn sec" id="hPrev">BACK</button>
@@ -529,8 +530,8 @@ body.rm * { animation-duration: .01s !important; transition-duration: .01s !impo
         <tr><td>Perseverance MOXIE</td><td>Oxygen generation fact</td><td><span class="snap">SNAPSHOT</span></td></tr>
       </tbody>
     </table>
-    <p id="liveT" style="margin:12px 0;font-weight:700;color:var(--sun)"></p>
-    <p style="font-size:13px;color:var(--ice); margin-top: 10px; line-height: 1.5;">
+    <p id="liveT" style="margin:10px 0;font-weight:700;color:var(--sun)"></p>
+    <p style="font-size:12px;color:var(--ice); margin-top: 8px; line-height: 1.4;">
       <b>Mandatory NASA Attribution:</b><br>
       Space weather: NASA DONKI and NASA SDO. Radiation: Curiosity RAD (NASA/SwRI). Mars weather and rover facts: NASA JPL and the Planetary Data System. Astronaut research: NASA OSDR. Oxygen: Perseverance MOXIE (NASA/JPL/MIT). Game values are scaled for play and are not live measurements unless tagged LIVE. Shake Station is made for the NASA Space Apps Challenge 2026 and is not an official NASA product.
     </p>
@@ -564,7 +565,7 @@ body.rm * { animation-duration: .01s !important; transition-duration: .01s !impo
     <label for="nm" style="font-weight:800;color:var(--sun)">Name your astronaut buddy:</label>
     <input class="nm" id="nm" maxlength="12" value="Pip" aria-label="Astronaut name">
     
-    <label for="diffSelect" style="font-weight:800;color:var(--sun);margin-top:10px;display:block">Survival Difficulty Mode:</label>
+    <label for="diffSelect" style="font-weight:800;color:var(--sun);margin-top:8px;display:block">Survival Difficulty Mode:</label>
     <div class="settings-group">
       <select id="diffSelect" aria-label="Survival Difficulty Mode">
         <option value="easy">Easy (Forgiving resource drain)</option>
@@ -577,7 +578,7 @@ body.rm * { animation-duration: .01s !important; transition-duration: .01s !impo
       <label>Arm Autopilot (Costs 1 coin/Sol, auto-shields on flares) <input type="checkbox" id="chkAutopilot" aria-label="Arm Autopilot"></label>
     </div>
 
-    <h3 style="color:var(--teal);margin-top:20px;font-size:16px;">SOUND & AUDIO CONTROLS</h3>
+    <h3 style="color:var(--teal);margin-top:16px;font-size:15px;">SOUND & AUDIO CONTROLS</h3>
     <div class="settings-group">
       <label>Master Sound (ON/OFF) <input type="checkbox" id="chkSound" aria-label="Master Sound"></label>
       <label>Background Music (BGM) <input type="checkbox" id="chkMusic" aria-label="Background Music"></label>
@@ -597,8 +598,8 @@ body.rm * { animation-duration: .01s !important; transition-duration: .01s !impo
 <section class="scr" id="brief" role="region" aria-label="Mission Briefing Screen">
   <div class="card panel">
     <h2>GALE CRATER, MARS</h2>
-    <p id="bP" style="font-size:18px;color:var(--cream);line-height:1.6"></p>
-    <button class="btn big" id="go" style="margin-top:20px" aria-label="Launch Mission Now">LAUNCH MISSION NOW</button>
+    <p id="bP" style="font-size:17px;color:var(--cream);line-height:1.5"></p>
+    <button class="btn big" id="go" style="margin-top:16px" aria-label="Launch Mission Now">LAUNCH MISSION NOW</button>
   </div>
 </section>
 
@@ -677,8 +678,8 @@ body.rm * { animation-duration: .01s !important; transition-duration: .01s !impo
         <div class="fc" id="pf"></div>
         <div class="bk" id="pb2"></div>
       </div>
-      <p style="text-align:center;font-size:13px;color:var(--ice);margin-top:12px;font-weight:800">✨ Tap postcard to flip & read NASA Science facts ✨</p>
-      <button class="btn big" id="nextDay" style="margin-top:10px" aria-label="Proceed to next sol">PROCEED TO NEXT SOL</button>
+      <p style="text-align:center;font-size:12px;color:var(--ice);margin-top:10px;font-weight:800">✨ Tap postcard to flip & read NASA Science facts ✨</p>
+      <button class="btn big" id="nextDay" style="margin-top:8px" aria-label="Proceed to next sol">PROCEED TO NEXT SOL</button>
     </div>
   </div>
 
@@ -687,7 +688,7 @@ body.rm * { animation-duration: .01s !important; transition-duration: .01s !impo
     <div class="card panel">
       <h2>MESSAGES & NOTIFICATIONS</h2>
       <div class="notif-list" id="notifList"></div>
-      <div class="hb" style="margin-top:16px"><button class="btn" id="closeNotif" aria-label="Close drawer">CLOSE DRAWER</button></div>
+      <div class="hb" style="margin-top:14px"><button class="btn" id="closeNotif" aria-label="Close drawer">CLOSE DRAWER</button></div>
     </div>
   </div>
 
@@ -695,9 +696,9 @@ body.rm * { animation-duration: .01s !important; transition-duration: .01s !impo
   <div class="ov" id="notifDetailModal" role="dialog" aria-modal="true" aria-label="Notification Details">
     <div class="card panel">
       <h3 id="detTitle" style="color:var(--sun);margin-top:0"></h3>
-      <p id="detMeta" style="font-size:12px;color:var(--ice);font-family:Orbitron"></p>
-      <p id="detBody" style="font-size:15px;color:var(--cream);line-height:1.6"></p>
-      <div class="hb" style="margin-top:16px"><button class="btn" id="closeDet" aria-label="Back to messages">BACK TO MESSAGES</button></div>
+      <p id="detMeta" style="font-size:11px;color:var(--ice);font-family:Orbitron"></p>
+      <p id="detBody" style="font-size:14px;color:var(--cream);line-height:1.5"></p>
+      <div class="hb" style="margin-top:14px"><button class="btn" id="closeDet" aria-label="Back to messages">BACK TO MESSAGES</button></div>
     </div>
   </div>
 
@@ -724,10 +725,8 @@ var difficulty = ls('ss.diff') || 'normal';
 var autopilotEnabled = ls('ss.autopilot') === '1';
 var liveR = null, S = null, busy = false, tipT = null;
 
-/* ---------- Enhanced Audio Engine with Event-Based Weather and Sol Sounds ---------- */
+/* ---------- Universal Cross-Platform Audio Engine (PC & Mobile Fix) ---------- */
 var AudioMgr = (function() {
-  var ctx = null, masterGain = null, bgmGain = null, sfxGain = null;
-  var bgmTimer = null;
   var activeStormSound = null;
 
   var sounds = {
@@ -754,54 +753,30 @@ var AudioMgr = (function() {
   });
 
   function init() {
-    if (ctx) return;
-    try {
-      ctx = new (window.AudioContext || window.webkitAudioContext)();
-      masterGain = ctx.createGain();
-      bgmGain = ctx.createGain();
-      sfxGain = ctx.createGain();
-
-      bgmGain.connect(masterGain);
-      sfxGain.connect(masterGain);
-      masterGain.connect(ctx.destination);
-      applySettings();
-    } catch(e) {}
-  }
-
-  function resume() {
-    if (ctx && ctx.state === 'suspended') {
-      ctx.resume();
-    }
+    // Unlocks Audio context on mobile browsers upon user interaction
+    Object.keys(sounds).forEach(function(k){
+      var s = sounds[k];
+      s.play().then(function(){
+        s.pause();
+        s.currentTime = 0;
+      }).catch(function(){});
+    });
+    applySettings();
   }
 
   function applySettings() {
-    if (!masterGain) return;
     var soundOn = ls('ss.sound') === '1';
-    var musicOn = ls('ss.bgm') === '1';
     var sfxOn = ls('ss.sfx') === '1';
-    var bgmVol = +(ls('ss.bgmVol') || 50) / 100;
     var sfxVol = +(ls('ss.sfxVol') || 70) / 100;
 
-    masterGain.gain.value = soundOn ? 1 : 0;
-    bgmGain.gain.value = musicOn ? bgmVol : 0;
-    
-    var effectiveSfxVol = sfxOn ? sfxVol : 0;
+    var effectiveVol = (soundOn && sfxOn) ? sfxVol : 0;
     Object.keys(sounds).forEach(function(k){
-      sounds[k].volume = effectiveSfxVol;
+      sounds[k].volume = effectiveVol;
     });
-
-    if (soundOn && musicOn) {
-      startBgm();
-    } else {
-      stopBgm();
-    }
   }
 
   function playSfx(type) {
-    init();
     if (ls('ss.sound') !== '1' || ls('ss.sfx') !== '1') return;
-    resume();
-
     var snd = sounds[type] || sounds['click'];
     try {
       snd.currentTime = 0;
@@ -810,12 +785,10 @@ var AudioMgr = (function() {
   }
 
   function playStormAtmosphere(isStorm) {
-    init();
     if (ls('ss.sound') !== '1' || ls('ss.sfx') !== '1') {
       if (activeStormSound) { activeStormSound.pause(); activeStormSound = null; }
       return;
     }
-    resume();
 
     if (isStorm) {
       if (!activeStormSound) {
@@ -833,9 +806,7 @@ var AudioMgr = (function() {
   }
 
   function playMoodSfx(mood) {
-    init();
     if (ls('ss.sound') !== '1' || ls('ss.sfx') !== '1') return;
-    resume();
     try {
       if (mood === 'happy' || mood === 'evacuated') {
         sounds['success'].currentTime = 0;
@@ -850,31 +821,8 @@ var AudioMgr = (function() {
     } catch(e) {}
   }
 
-  function startBgm() {
-    if (bgmTimer) return;
-    bgmTimer = setInterval(function(){
-      if (!ctx || ls('ss.sound') !== '1' || ls('ss.bgm') !== '1') return;
-      try {
-        sounds['Menu Sound.wav'].currentTime = 0;
-        sounds['Menu Sound.wav'].play().catch(function(){});
-      } catch(e) {}
-    }, 15000);
-  }
-
-  function stopBgm() {
-    if (bgmTimer) {
-      clearInterval(bgmTimer);
-      bgmTimer = null;
-    }
-    if (activeStormSound) {
-      activeStormSound.pause();
-      activeStormSound = null;
-    }
-  }
-
   return {
     init: init,
-    resume: resume,
     applySettings: applySettings,
     playSfx: playSfx,
     playStormAtmosphere: playStormAtmosphere,
@@ -978,7 +926,6 @@ function seededRandomMission(seed) {
   return schedule;
 }
 
-/* ---------- High Score & Leaderboard Helpers ---------- */
 function getLeaderboard() {
   try {
     var data = ls('ss.leaderboard');
@@ -994,7 +941,6 @@ function saveScore(name, score, badge) {
   ls('ss.leaderboard', JSON.stringify(lb));
 }
 
-/* ---------- Live DONKI Check with 3s Timeout ---------- */
 function live() {
   return new Promise(function(res){
     try {
@@ -1026,7 +972,6 @@ function live() {
 /* ---------- Boot Sequence ---------- */
 var armed = false;
 function boot() {
-  AudioMgr.init();
   $('boot').classList.add('on');
   var L = ['SHAKE STATION OS v2.0 - MARS HELD', 'Checking life support matrix... OK', 'Activating 3D radiation shields... OK', 'Linking with Earth Deep Space Network...', 'Loading Curiosity RAD & DONKI telemetry...'], i = 0, el = $('bootL');
   el.style.whiteSpace = 'pre-line'; el.textContent = '';
@@ -1035,16 +980,18 @@ function boot() {
     else { $('bootLogo').classList.add('on'); $('bootTag').textContent = 'Shake the globe. Survive the sky.'; $('tapBtn').classList.add('on'); armed = true; AudioMgr.playSfx('glitch'); }
   })();
 }
+
 function leaveBoot() {
   if (!armed) return;
   armed = false;
+  AudioMgr.init(); // Unlocks audio for mobile/PC
   AudioMgr.playSfx('click');
   loading();
 }
+
 $('boot').addEventListener('click', leaveBoot);
 document.addEventListener('keydown', function(e){ if ($('boot').classList.contains('on') && (e.key === 'Enter' || e.key === ' ')) leaveBoot(); });
 
-/* ---------- Loading Screen ---------- */
 function loading() {
   var a = document.querySelectorAll('.scr'); for (var i = 0; i < a.length; i++) a[i].classList.remove('on');
   $('loading').classList.add('on');
@@ -1061,7 +1008,6 @@ function loading() {
 }
 $('lgo').onclick = function(){ clearInterval(tipT); AudioMgr.playSfx('click'); home(); };
 
-/* ---------- Screens Navigation ---------- */
 function show(id) {
   var a = document.querySelectorAll('.scr'); for (var i = 0; i < a.length; i++) a[i].classList.remove('on');
   $(id).classList.add('on');
@@ -1091,7 +1037,7 @@ function dataScr() {
 }
 $('hHow').onclick = how; $('hData').onclick = dataScr; $('hLab').onclick = function(){ show('lab'); AudioMgr.playSfx('popup'); };
 
-/* ---------- Crew & Audio Settings & Autopilot Handling ---------- */
+/* ---------- Crew & Settings Handling ---------- */
 $('hCrew').onclick = function(){
   $('nm').value = pipName;
   $('diffSelect').value = difficulty;
@@ -1218,7 +1164,7 @@ $('openNotif').onclick = function(){ AudioMgr.playSfx('click'); renderNotifList(
 $('closeNotif').onclick = function(){ AudioMgr.playSfx('click'); $('notifModal').classList.remove('on'); };
 $('closeDet').onclick = function(){ AudioMgr.playSfx('click'); $('notifDetailModal').classList.remove('on'); $('notifModal').classList.add('on'); };
 
-/* ---------- Game Loop & Earth Communications & Autopilot ---------- */
+/* ---------- Game Loop ---------- */
 var SYS = [{k:'life', n:'LIFE SUPPORT', i:'🫧'}, {k:'food', n:'FOOD CROPS', i:'🌿'}, {k:'shield', n:'RAD SHIELD', i:'🛡️'}, {k:'sci', n:'SCIENCE', i:'🔭'}];
 function cur() { return S.sch[S.day - 1]; }
 function income() { return R.inc[cur().w]; }
@@ -1244,8 +1190,6 @@ function toast(t, r) {
 
 function dawn() {
   busy = false;
-  
-  // Autopilot Logic
   if (autopilotEnabled && S.batt >= 1 && cur().f) {
     var totalAlloc = spent() - S.alloc.shield;
     if (totalAlloc + 3 <= avail()) {
@@ -1269,13 +1213,8 @@ function dawn() {
   } else {
     AudioMgr.playStormAtmosphere(false);
   }
-
-  if (S.batt < 3 && cur().w === 'storm') {
-    addNotif('Survival Tip', 'Keep enough energy for essential life support and manage food supplies before storm days!', 'Educational Tips', S.day);
-  }
 }
 
-/* ---------- Dynamic Pip Mood Priority System ---------- */
 function getPipMood() {
   if (S.fail) return 'evacuated';
   if (S.dose >= 70 || S.life <= 30 || S.food <= 30 || cur().f) return 'scared';
@@ -1311,15 +1250,15 @@ function render() {
   SYS.forEach(function(s){
     var a = S.alloc[s.k], v = Math.round(M[s.k] / 10), ms = '';
     for (var j = 0; j < 10; j++) {
-      ms += '<i style="' + (j < v ? 'background:var(--' + (s.k==='life'?'teal':s.k==='food'?'leaf':s.k==='shield'?'shield':'sci') + '); box-shadow: 0 0 8px var(--' + (s.k==='life'?'teal':s.k==='food'?'leaf':s.k==='shield'?'shield':'sci') + ')' : '') + '"></i>';
+      ms += '<i style="' + (j < v ? 'background:var(--' + (s.k==='life'?'teal':s.k==='food'?'leaf':s.k==='shield'?'shield':'sci') + '); box-shadow: 0 0 6px var(--' + (s.k==='life'?'teal':s.k==='food'?'leaf':s.k==='shield'?'shield':'sci') + ')' : '') + '"></i>';
     }
-    var hint = s.k==='life'?'Air & heat: ' + sg((a-R.lifeNeed)*R.lifeRate) + ' /day':s.k==='food'?'Crops: ' + sg((a-R.foodNeed)*R.foodRate-R.foodDrain) + ' /day':s.k==='shield'?'Radiation: +' + Math.max(0,R.doseBase-a) + ' /day':'Discovery: +' + (a*R.sci) + ' pts';
+    var hint = s.k==='life'?'Air: ' + sg((a-R.lifeNeed)*R.lifeRate):s.k==='food'?'Crops: ' + sg((a-R.foodNeed)*R.foodRate-R.foodDrain):s.k==='shield'?'RAD: +' + Math.max(0,R.doseBase-a):'Pts: +' + (a*R.sci);
     var mx = s.k==='sci'?2:3;
     h += '<div class="panel dk"><div class="ic">' + s.i + '</div><b>' + s.n + '</b><div class="mt" aria-hidden="true">' + ms + '</div><div class="ct"><button data-k="' + s.k + '" data-d="-1" aria-label="Decrease ' + s.n + '"' + (a<=0?' disabled':'') + '>–</button><span>' + a + '</span><button data-k="' + s.k + '" data-d="1" aria-label="Increase ' + s.n + '"' + (left<=0||a>=mx?' disabled':'') + '>＋</button></div><small>' + hint + '</small></div>';
   });
   $('dock').innerHTML = h;
 
-  var batt = '<span style="min-width:180px">Coins to spend: <b>' + left + '</b><br>Battery reserve: <b>' + save + '</b></span><b>';
+  var batt = '<span style="min-width:150px">Coins: <b>' + left + '</b> | Battery: <b>' + save + '</b></span><b>';
   for (i = 0; i < R.cap; i++) batt += '<i class="' + (i < save ? 'f' : i < save + sp ? 'p' : '') + '"></i>';
   $('batt').innerHTML = batt + '</b>';
 
@@ -1355,7 +1294,7 @@ function render() {
     evacuated: 'I am safe! Mission paused.'
   };
 
-  $('pcard').innerHTML = '<b>' + moodLabels[moodType] + '</b><br>' + says[moodType] + '<br><span style="color:var(--ice);font-size:13px">' + (S.em ? '📨 ' + S.em.text : '') + '</span>';
+  $('pcard').innerHTML = '<b>' + moodLabels[moodType] + '</b><br>' + says[moodType];
   updateNotifBadge();
 }
 
@@ -1403,9 +1342,7 @@ $('dock').addEventListener('click', function(e){
 
 document.addEventListener('mouseover', function(e){
   var btn = e.target.closest('button');
-  if (btn) {
-    AudioMgr.playSfx('hover');
-  }
+  if (btn) AudioMgr.playSfx('hover');
 });
 
 $('endBtn').onclick = endDay;
@@ -1567,7 +1504,8 @@ function report() {
         '<p style="text-align:center">Final Score Breakdown:<br>' +
         '• Survived Days (' + survivedDays + ' × 100): +' + (survivedDays * 100) + '<br>' +
         '• Discovery Points: +' + S.sci + '<br>' +
-        '• Remaining Battery (' + S.batt + ' × 5): +' + (S.batt * 5) + '· Postcard Bonus (' + survivedDays + ' × 50): +' + postcardBonus + '<br>' +
+        '• Remaining Battery (' + S.batt + ' × 5): +' + (S.batt * 5) + '<br>' +
+        '• Postcard Bonus (' + survivedDays + ' × 50): +' + postcardBonus + '<br>' +
         '<b>Total Final Score: ' + finalScore + '</b></p>';
   }
 
