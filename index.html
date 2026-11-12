@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Shake Station - Junior Astronaut Mission Trainer</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Nunito:wght@700;800;900&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+:root {
+  box-sizing: border-box;
+  --space: #050614;
+  --panel: rgba(20, 27, 48, 0.92);
+  --panel-border: rgba(127, 209, 192, 0.4);
+  --cream: #fffaed;
+  --orange: #ff9f1c;
+  --orange-glow: rgba(255, 159, 28, 0.6);
+  --red: #ff3366;
+  --teal: #2ec4b6;
+  --leaf: #2cb67d;
+  --shield: #3a86ff;
+  --shield-glow: rgba(58, 134, 255, 0.7);
+  --sci: #8338ec;
+  --sun: #ffb703;
+  --ice: #8ecae6;
+  --dark-blue: #023047;
+}
+
+*, *::before, *::after { box-sizing: inherit; }
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  width: 100dvw;
+  height: 100dvh;
+  background: radial-gradient(circle at 50% 20%, #101735 0%, #050614 70%);
+  color: #fff;
+  font: 16px/1.5 Nunito, system-ui, sans-serif;
+  overflow: hidden;
+  position: relative;
+}
+
+h1, h2, h3, button, .o {
+  font-family: Orbitron, sans-serif;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+button { cursor: pointer; color: inherit; font: inherit; }
+button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid var(--sun); outline-offset: 3px; }
+
+.stars-bg {
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(2px 2px at 20px 30px, #ffffff, rgba(0,0,0,0)),
+                    radial-gradient(2px 2px at 40px 70px, var(--ice), rgba(0,0,0,0)),
+                    radial-gradient(1px 1px at 90px 40px, #ffffff, rgba(0,0,0,0));
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  animation: starTwinkle 10s linear infinite;
+  opacity: 0.6;
+  z-index: -1;
+}
+@keyframes starTwinkle { 0% { transform: translateY(0); } 100% { transform: translateY(-200px); } }
+
+.scr {
+  position: absolute;
+  inset: 0;
+  display: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px;
+  background: radial-gradient(circle at 50% 50%, rgba(20,27,48,0.4) 0%, rgba(5,6,20,0.95) 100%);
+  width: 100%;
+  height: 100%;
+}
+.scr.on { display: flex; flex-direction: column; justify-content: center; align-items: center; animation: sciFiIris 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
+@keyframes sciFiIris {
+  from { transform: scale(0.92); opacity: 0; filter: blur(6px); }
+  to { transform: scale(1); opacity: 1; filter: blur(0); }
+}
+
+.panel {
+  background: var(--panel);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 2px solid var(--panel-border);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 16px 20px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.panel:hover {
+  border-color: var(--teal);
+  box-shadow: 0 20px 45px rgba(46, 196, 182, 0.25), inset 0 1px 4px rgba(255, 255, 255, 0.4);
+}
+
+.btn {
+  border: 0;
+  background: linear-gradient(135deg, var(--sun) 0%, var(--orange) 100%);
+  color: #023047;
+  font-weight: 900;
+  min-height: 48px;
+  min-width: 140px;
+  padding: 12px 20px;
+  font-size: 15px;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(255, 159, 28, 0.4), inset 0 3px 0 rgba(255, 255, 255, 0.6), inset 0 -4px 0 rgba(180, 80, 0, 0.5);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.4);
+}
+.btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 10px 28px var(--orange-glow), inset 0 3px 0 rgba(255, 255, 255, 0.8), inset 0 -4px 0 rgba(180, 80, 0, 0.5);
+}
+.btn:active { transform: translateY(2px) scale(0.98); box-shadow: 0 4px 12px var(--orange-glow); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; filter: grayscale(0.5); }
+.btn.big { min-height: 56px; font-size: 18px; width: 100%; border-radius: 16px; }
+.btn.sec {
+  background: rgba(142, 202, 230, 0.1);
+  color: var(--ice);
+  box-shadow: inset 0 0 0 2px var(--ice), 0 4px 15px rgba(0,0,0,0.3);
+  text-shadow: 0 0 10px rgba(142, 202, 230, 0.6);
+}
+.btn.sec:hover { background: rgba(142, 202, 230, 0.2); color: #fff; box-shadow: inset 0 0 0 2px var(--teal), 0 6px 20px rgba(46,196,182,0.4); }
+
+.cen { max-width: 980px; margin: 0 auto; width: 100%; max-height: 95vh; overflow-y: auto; }
+
+.tabs {
+  display: flex;
+  gap: 16px;
+  border-bottom: 2px solid rgba(142, 202, 230, 0.3);
+  padding-bottom: 10px;
+  font: 800 14px Orbitron, sans-serif;
+  color: var(--ice);
+  flex-wrap: wrap;
+}
+.tabs button { background: none; border: 0; color: inherit; padding: 8px 14px; border-radius: 8px; transition: all 0.2s; min-height: 44px; }
+.tabs button:hover { background: rgba(255,255,255,0.05); color: var(--sun); }
+.tabs .a { background: rgba(46, 196, 182, 0.2); color: var(--teal); border: 1px solid var(--teal); box-shadow: 0 0 15px rgba(46, 196, 182, 0.3); }
+
+/* Boot & Loading */
+#boot { background: #02030a; }
+#boot.on { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+.bl { font: 15px/1.8 "Courier New", monospace; color: var(--teal); text-align: left; min-height: 140px; width: min(440px, 92%); background: rgba(0,0,0,0.6); padding: 16px; border-radius: 12px; border: 1px solid var(--teal); box-shadow: 0 0 20px rgba(46,196,182,0.2); }
+.logo { font: 900 clamp(38px, 9vw, 76px)/.95 Orbitron, sans-serif; color: var(--cream); text-shadow: 0 0 30px var(--orange-glow), 4px 4px 0 var(--red), -4px -4px 0 var(--shield); margin: 20px 0; opacity: 0; transform: scale(0.9); transition: all 0.5s; }
+.logo.on { opacity: 1; transform: scale(1); }
+.tap { color: var(--sun); font-size: 18px; font-weight: 800; animation: blinkTap 1.2s infinite; opacity: 0; margin-top: 20px; text-shadow: 0 0 12px var(--sun); }
+.tap.on { opacity: 1; }
+@keyframes blinkTap { 50% { opacity: 0.3; transform: scale(0.98); } }
+.foot { color: var(--ice); font-size: 13px; opacity: 0.7; margin-top: 24px; text-align: center; padding: 0 10px; }
+
+#loading.on { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; text-align: center; }
+.ring { width: 140px; height: 140px; border: 3px solid rgba(142,202,230,0.2); border-top-color: var(--teal); border-radius: 50%; position: relative; animation: spinRing 2s linear infinite; box-shadow: 0 0 30px rgba(46,196,182,0.3); }
+.ring i { position: absolute; top: -10px; left: 60px; width: 20px; height: 20px; border-radius: 50%; background: var(--sun); box-shadow: 0 0 20px var(--sun); }
+.ring::after { content: ""; position: absolute; inset: 30px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #e76f51, #9d0208); }
+@keyframes spinRing { to { transform: rotate(360deg); } }
+.segs { display: flex; gap: 6px; width: min(380px, 90%); }
+.segs b { flex: 1; height: 16px; background: rgba(142,202,230,0.15); border-radius: 4px; border: 1px solid rgba(142,202,230,0.3); }
+.segs b.f { background: linear-gradient(90deg, var(--teal), var(--shield)); box-shadow: 0 0 12px var(--teal); }
+.st { font: 14px/1.8 "Courier New", monospace; color: var(--ice); min-height: 70px; }
+.tip { max-width: 440px; min-height: 80px; border-left: 5px solid var(--sun); }
+.tag { display: inline-block; background: var(--sun); color: #023047; font: 900 11px Orbitron, sans-serif; padding: 3px 10px; border-radius: 6px; margin-right: 8px; }
+
+/* Home Grid & Tables */
+.hg { display: grid; gap: 16px; grid-template-columns: 1fr; margin-top: 16px; }
+@media(min-width: 760px) { .hg { grid-template-columns: 240px 1fr 320px; align-items: center; } }
+.sites { display: grid; gap: 12px; }
+.site { background: rgba(20, 27, 48, 0.6); border: 2px solid var(--panel-border); padding: 16px; text-align: left; font-weight: 800; font-size: 14px; color: var(--ice); border-radius: 12px; transition: all 0.2s; min-height: 48px; }
+.site.sel { background: linear-gradient(135deg, var(--teal), var(--shield)); color: #023047; border-color: #fff; box-shadow: 0 0 25px rgba(46,196,182,0.5); transform: scale(1.02); }
+.site small { display: block; font: 700 11px Nunito; opacity: 0.9; margin-top: 3px; }
+.orbv { display: grid; place-items: center; }
+.pn h2 { margin: 0 0 8px; color: var(--cream); font-size: 24px; }
+.chip { display: inline-block; background: rgba(142,202,230,0.15); border: 1px solid var(--ice); padding: 3px 10px; border-radius: 6px; margin: 3px; font-size: 12px; color: var(--ice); font-weight: 700; }
+.hb { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; justify-content: center; }
+
+.card { max-width: 660px; margin: auto; text-align: left; width: 100%; max-height: 90vh; overflow-y: auto; }
+.card h2 { color: var(--cream); margin: 0 0 12px; font-size: 24px; }
+table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; border-radius: 10px; overflow: hidden; border: 1px solid var(--panel-border); }
+td, th { padding: 10px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid rgba(142,202,230,0.15); border-right: 1px solid rgba(142,202,230,0.15); }
+th { background: rgba(2, 48, 71, 0.8); font-family: Orbitron, sans-serif; font-size: 11px; color: var(--sun); letter-spacing: 1px; }
+.live { color: #2ec4b6; font-weight: 900; }
+.snap { color: var(--sun); font-weight: 900; }
+.nm { width: 100%; padding: 14px; font-size: 18px; font-family: Orbitron, sans-serif; background: rgba(5,6,20,0.9); color: var(--sun); border: 2px solid var(--teal); border-radius: 10px; margin: 10px 0; }
+
+/* Settings / Crew Audio Controls & Difficulty & Autopilot Styling */
+.settings-group { margin: 12px 0; background: rgba(255,255,255,0.04); padding: 12px; border-radius: 10px; border: 1px solid var(--panel-border); }
+.settings-group label { display: flex; justify-content: space-between; align-items: center; font-weight: 700; color: var(--cream); cursor: pointer; margin: 8px 0; min-height: 44px; }
+.settings-group input[type="range"] { width: 50%; accent-color: var(--sun); cursor: pointer; min-height: 44px; }
+.settings-group input[type="checkbox"] { width: 24px; height: 24px; accent-color: var(--teal); cursor: pointer; }
+.settings-group select { background: #0f1020; color: #fff; border: 2px solid var(--teal); padding: 8px 14px; border-radius: 6px; font-family: Orbitron; min-height: 44px; }
+
+/* Cockpit HUD & Notification Center Button */
+.gw { max-width: 980px; margin: auto; display: grid; gap: 8px; width: 100%; height: 100%; max-height: 100%; overflow-y: auto; padding: 10px 0; }
+.top { display: flex; gap: 12px; align-items: stretch; flex-wrap: wrap; }
+.tl { flex: 1; display: flex; gap: 4px; align-items: flex-end; padding: 10px 14px; background: var(--panel); border-radius: 14px; border: 2px solid var(--panel-border); box-shadow: inset 0 0 20px rgba(0,0,0,0.5); min-width: 280px; overflow-x: auto; }
+.tl div { flex: 1; text-align: center; font: 800 11px Orbitron, sans-serif; border-bottom: 6px solid rgba(142,202,230,0.2); padding-bottom: 4px; color: var(--ice); min-height: 40px; border-radius: 3px 3px 0 0; min-width: 28px; }
+.tl .dn { border-color: rgba(255,255,255,0.1); color: rgba(255,255,255,0.3); background: rgba(0,0,0,0.2); }
+.tl .td { border-color: var(--sun); color: var(--sun); background: rgba(255,183,3,0.15); text-shadow: 0 0 10px var(--sun); transform: scale(1.06); }
+.tl .wn { color: var(--red); border-color: var(--red); }
+
+.orb { min-width: 150px; text-align: center; padding: 8px 12px; font: 800 12px Orbitron, sans-serif; color: var(--cream); background: var(--panel); border-radius: 14px; border: 2px solid var(--panel-border); display: flex; flex-direction: column; justify-content: center; align-items: center; }
+.orb span { font-size: 30px; display: block; }
+
+.stage {
+  position: relative;
+  border: 3px solid var(--teal);
+  overflow: hidden;
+  background: #0b0c1e;
+  border-radius: 18px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.8), inset 0 0 40px rgba(46,196,182,0.2);
+}
+#sc { display: block; width: 100%; height: auto; aspect-ratio: 16/9; max-height: 38vh; object-fit: cover; }
+
+.shake { animation: sciFiShake 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; }
+@keyframes sciFiShake {
+  15%, 85% { transform: translate3d(-8px, 2px, 0) rotate(-0.5deg); }
+  30%, 70% { transform: translate3d(8px, -2px, 0) rotate(0.5deg); }
+  50% { transform: translate3d(-6px, 3px, 0) rotate(-0.3deg); }
+}
+
+/* Smart Notification Center & Toasts */
+#toasts { position: absolute; left: 14px; top: 14px; display: grid; gap: 8px; max-width: 75%; z-index: 10; pointer-events: none; }
+.toast {
+  background: rgba(16, 23, 53, 0.95);
+  backdrop-filter: blur(10px);
+  border-left: 6px solid var(--sun);
+  border-radius: 0 10px 10px 0;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.6), 0 0 15px rgba(255,183,3,0.3);
+  padding: 10px 16px;
+  font: 800 13px Orbitron, sans-serif;
+  color: #fff;
+  animation: slideInToast 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.toast.r { border-color: var(--red); box-shadow: 0 8px 25px rgba(0,0,0,0.6), 0 0 20px rgba(255,51,102,0.5); }
+@keyframes slideInToast { from { transform: translateX(-120%) scale(0.9); opacity: 0; } to { transform: translateX(0) scale(1); opacity: 1; } }
+
+.notif-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: var(--dark-blue);
+  border: 2px solid var(--teal);
+  color: var(--sun);
+  padding: 10px 16px;
+  border-radius: 10px;
+  font: 800 12px Orbitron, sans-serif;
+  cursor: pointer;
+  z-index: 12;
+  min-height: 44px;
+  box-shadow: 0 0 15px rgba(46,196,182,0.4);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.notif-btn:hover { background: var(--teal); color: var(--dark-blue); }
+.badge { background: var(--red); color: #fff; border-radius: 50%; padding: 2px 6px; font-size: 10px; font-weight: 900; }
+
+.pc { font-size: 14px; color: var(--cream); padding: 10px 16px; font-weight: 700; background: var(--panel); border-radius: 14px; border: 2px solid var(--panel-border); }
+#flash { position: absolute; inset: 0; background: radial-gradient(circle, #ffffff 0%, var(--sun) 60%, var(--orange) 100%); opacity: 0; pointer-events: none; z-index: 5; }
+.fl { animation: flashBurst 0.7s; }
+@keyframes flashBurst { 25% { opacity: 0.95; } to { opacity: 0; } }
+
+/* Resource Docks */
+.dock { display: grid; grid-template-columns: repeat(1, 1fr); gap: 10px; }
+@media(min-width: 500px) { .dock { grid-template-columns: repeat(2, 1fr); } }
+@media(min-width: 760px) { .dock { grid-template-columns: repeat(4, 1fr); } }
+
+.dk {
+  text-align: center;
+  padding: 10px 8px;
+  background: var(--panel);
+  border: 2px solid var(--panel-border);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  transition: all 0.25s;
+}
+.dk:hover { border-color: var(--teal); transform: translateY(-4px); }
+.dk .ic { font-size: 28px; }
+.dk b { display: block; font: 900 12px Orbitron, sans-serif; color: var(--sun); margin-top: 4px; }
+
+.mt { display: flex; gap: 4px; margin: 6px 8px; }
+.mt i { flex: 1; height: 8px; background: rgba(255,255,255,0.1); border-radius: 3px; border: 1px solid rgba(255,255,255,0.15); }
+
+.ct { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 4px 0; }
+.ct button {
+  width: 38px; height: 38px;
+  border: 2px solid var(--teal);
+  background: rgba(46, 196, 182, 0.15);
+  color: var(--cream);
+  font-size: 20px;
+  font-weight: 900;
+  border-radius: 8px;
+}
+.ct button:hover:not(:disabled) { background: var(--teal); color: #023047; }
+.ct button:disabled { opacity: 0.25; border-color: rgba(255,255,255,0.1); background: transparent; }
+.ct span { font: 900 22px Orbitron; min-width: 28px; color: var(--sun); }
+.dk small { display: block; color: var(--ice); font-size: 10px; min-height: 28px; margin-top: 4px; font-weight: 700; }
+
+.bar { display: grid; gap: 12px; grid-template-columns: 1fr; }
+@media(min-width: 700px) { .bar { grid-template-columns: 1fr 360px; align-items: center; } }
+
+.batt {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font: 800 13px Orbitron;
+  color: var(--sun);
+  background: var(--panel);
+  padding: 10px 16px;
+  border: 2px solid var(--panel-border);
+  border-radius: 14px;
+}
+.batt b { width: 100%; display: flex; gap: 4px; margin-top: 4px; }
+.batt i { flex: 1; height: 18px; background: rgba(255,255,255,0.1); border-radius: 4px; border: 1px solid rgba(255,255,255,0.15); }
+.batt i.f { background: linear-gradient(135deg, var(--sun), var(--orange)); border-color: var(--sun); }
+.batt i.p { background: #b45309; }
+
+.coin {
+  position: fixed;
+  z-index: 50;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff3a0, var(--orange));
+  box-shadow: 0 0 20px var(--sun);
+  pointer-events: none;
+}
+
+/* Modals & Notification Center Drawer */
+.ov {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 3, 10, 0.9);
+  backdrop-filter: blur(12px);
+  display: none;
+  overflow-y: auto;
+  padding: 20px;
+  z-index: 30;
+}
+.ov.on { display: flex; justify-content: center; align-items: center; animation: fadeInModal 0.3s ease-out; }
+@keyframes fadeInModal { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+.pcw { max-width: 620px; margin: auto; perspective: 1500px; width: 100%; }
+.flip {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/2;
+  transform-style: preserve-3d;
+  transition: transform 0.8s;
+  cursor: pointer;
+  border-radius: 16px;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+}
+.flip.b { transform: rotateY(180deg); }
+.fc, .bk {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  background: #fdf6e2;
+  color: #2c1810;
+  padding: 16px;
+  border: 10px solid #fffaf0;
+  border-radius: 16px;
+  overflow-y: auto;
+  font-size: 14px;
+}
+.bk { transform: rotateY(180deg); background: #fbf0d9; }
+.fc svg { width: 100%; height: 48%; display: block; border-radius: 8px; }
+.hw { font: 700 21px/1.3 "Patrick Hand", cursive; margin: 8px 0; color: #3a2210; }
+.stamp {
+  position: absolute; top: 16px; right: 16px; width: 64px; height: 76px;
+  border: 3px dashed #b8451f; background: #f4dc9b; font: 900 10px Orbitron;
+  text-align: center; padding-top: 8px; color: #b8451f; transform: rotate(5deg);
+  border-radius: 4px;
+}
+.pm { position: absolute; top: 88px; right: 10px; font: 900 10px Orbitron; color: #8a6a4a; border: 2px solid #8a6a4a; border-radius: 50%; padding: 8px; transform: rotate(-14deg); background: #f8ecd0cc; }
+.ss { display: flex; gap: 8px; flex-wrap: wrap; font: 800 11px Orbitron; margin-top: 8px; }
+.ss span { background: #3a2412; color: #f8ecd0; padding: 3px 8px; border-radius: 4px; }
+.bk h3 { margin: 6px 0 2px; color: #b8451f; font-size: 13px; font-family: Orbitron; }
+.src { font-size: 11px; color: #7a5a3a; margin-top: 4px; }
+.late { background: var(--red); color: #fff; font: 900 10px Orbitron; padding: 2px 8px; border-radius: 4px; }
+
+.chain { list-style: none; padding: 0; display: grid; gap: 10px; }
+.chain li { display: flex; gap: 12px; align-items: center; background: rgba(255,255,255,0.06); padding: 10px 14px; border-radius: 10px; }
+.chain .i { font-size: 28px; }
+.patch { display: inline-block; border: 4px solid var(--sun); border-radius: 99px; padding: 8px 24px; color: var(--sun); font: 900 20px Orbitron; background: rgba(255,183,3,0.1); animation: badgePulse 2s infinite ease-in-out; }
+@keyframes badgePulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 15px var(--sun); } 50% { transform: scale(1.05); box-shadow: 0 0 30px var(--orange); } }
+
+.scrap { display: flex; gap: 12px; overflow-x: auto; padding: 10px 0; }
+.scrap div { min-width: 170px; background: #fdf6e2; color: #2c1810; padding: 12px; border-radius: 10px; font-size: 12px; }
+
+/* Notification Center Modal Specifics */
+.notif-list { display: grid; gap: 10px; margin-top: 12px; max-height: 350px; overflow-y: auto; }
+.notif-item { background: rgba(255,255,255,0.05); border: 1px solid var(--panel-border); padding: 12px; border-radius: 10px; cursor: pointer; transition: all 0.25s; min-height: 48px; }
+.notif-item:hover { background: rgba(46,196,182,0.15); border-color: var(--teal); transform: translateX(4px); }
+.notif-item.unread { border-left: 4px solid var(--sun); }
+.notif-meta { font-size: 11px; color: var(--ice); font-family: Orbitron; margin-bottom: 4px; display: flex; justify-content: space-between; }
+
+body.rm * { animation-duration: .01s !important; transition-duration: .01s !important; }
+.dust line { stroke: #ffd7a8; stroke-width: 2.5; opacity: 0.75; animation: ds 0.7s linear infinite; }
+@keyframes ds { from { transform: translateX(-150px); } to { transform: translateX(950px); } }
+
+.pip { animation: pipFloat 3.5s ease-in-out infinite; transform-origin: 50% 100%; transform-box: fill-box; }
+@keyframes pipFloat { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-4px) scale(1.02); } }
+</style>
+</head>
+<body>
+<div class="stars-bg"></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<g id="pb">
+  <rect x="-28" y="28" width="56" height="82" rx="22" fill="#ffffff" filter="drop-shadow(0 0 8px rgba(255,255,255,0.6))"/>
+  <rect x="-16" y="50" width="32" height="24" rx="8" fill="#3a86ff" stroke="#8ecae6" stroke-width="2"/>
+  <circle cx="-6" cy="62" r="3" fill="#ff3366"/>
+  <circle cx="6" cy="62" r="3" fill="#ffb703"/>
+  <ellipse cx="-36" cy="64" rx="11" ry="25" fill="#ffffff" stroke="#e0e0e0" stroke-width="1.5"/>
+  <ellipse cx="36" cy="64" rx="11" ry="25" fill="#ffffff" stroke="#e0e0e0" stroke-width="1.5"/>
+  <rect x="-26" y="104" width="22" height="28" rx="9" fill="#2ec4b6"/>
+  <rect x="4" y="104" width="22" height="28" rx="9" fill="#2ec4b6"/>
+  <rect x="-34" y="34" width="10" height="50" rx="5" fill="#8ecae6"/>
+  <circle r="44" fill="rgba(255,255,255,0.95)" stroke="#3a86ff" stroke-width="3"/>
+  <ellipse cy="2" rx="35" ry="29" fill="#0b0c24"/>
+  <path d="M-22 -12 Q -10 -22 10 -18 Q -4 -12 -22 -12 Z" fill="rgba(255,255,255,0.5)" rx="4"/>
+</g>
+</defs></svg>
+
+<!-- 1. Boot Screen -->
+<section class="scr" id="boot" role="region" aria-label="Boot Screen">
+  <div class="bl" id="bootL"></div>
+  <div class="logo" id="bootLogo">SHAKE<br>STATION</div>
+  <div class="o" style="color:var(--ice);font-size:14px;font-weight:800;" id="bootTag"></div>
+  <button class="tap o btn big" id="tapBtn" aria-label="Tap screen to start mission">▶ TAP SCREEN TO START MISSION ◀</button>
+  <div class="foot">Made for NASA Space Apps Challenge 2026 · Team Globe Guardians<br>Not an official NASA product</div>
+</section>
+
+<!-- 2. Loading Screen -->
+<section class="scr" id="loading" role="region" aria-label="Loading Screen">
+  <div class="ring" aria-hidden="true"><i></i></div>
+  <div class="segs" id="segs"></div>
+  <div class="st" id="lst"></div>
+  <div class="tip panel" id="tip"></div>
+  <button class="btn" id="lgo" disabled>LAUNCH SYSTEM</button>
+</section>
+
+<!-- 3. Home Screen -->
+<section class="scr" id="home" role="region" aria-label="Home Screen">
+  <div class="cen">
+    <div class="tabs" role="tablist">
+      <button class="a" data-t="menu" role="tab" aria-selected="true">MENU</button>
+      <button data-t="sites" role="tab" aria-selected="false">SITES</button>
+      <button data-t="crew" role="tab" aria-selected="false">CREW</button>
+      <button data-t="data" role="tab" aria-selected="false">DATA</button>
+    </div>
+    <div class="hg">
+      <div class="sites" id="sites">
+        <button class="site sel" aria-pressed="true">GALE CRATER<small>Mars · Curiosity Rover</small></button>
+        <button class="site" disabled>JEZERO CRATER<small>Coming soon</small></button>
+        <button class="site" disabled>SHACKLETON RIM<small>Moon · Coming soon</small></button>
+      </div>
+      <div class="orbv">
+        <svg viewBox="0 0 300 300" width="100%" style="max-width:340px" role="img" aria-label="Mars hologram">
+          <defs>
+            <radialGradient id="marsGrad" cx="35%" cy="30%" r="70%">
+              <stop offset="0%" stop-color="#ff9f1c"/>
+              <stop offset="60%" stop-color="#c1582a"/>
+              <stop offset="100%" stop-color="#7a2a12"/>
+            </radialGradient>
+          </defs>
+          <circle cx="150" cy="150" r="140" fill="none" stroke="rgba(46,196,182,0.2)" stroke-dasharray="6 6"/>
+          <circle cx="150" cy="150" r="118" fill="none" stroke="rgba(58,134,255,0.3)" stroke-width="1.5"/>
+          <circle cx="150" cy="150" r="96" fill="none" stroke="rgba(255,183,3,0.3)" stroke-width="1"/>
+          <circle cx="150" cy="150" r="78" fill="url(#marsGrad)" filter="drop-shadow(0 0 20px rgba(193,88,42,0.6))"/>
+          <path d="M90 120 Q150 140 210 110 M86 145 Q150 165 214 135 M95 170 Q150 190 205 160" stroke="#f4dc9b" stroke-width="5" stroke-linecap="round" opacity=".6"/>
+          <circle cx="230" cy="190" r="26" fill="var(--sun)" filter="drop-shadow(0 0 10px var(--sun))"/>
+          <circle cx="110" cy="50" r="14" fill="var(--teal)" filter="drop-shadow(0 0 8px var(--teal))"/>
+        </svg>
+      </div>
+      <div class="panel pn">
+        <h2>GALE CRATER</h2>
+        <p>Where Curiosity measured radiation and weather on Mars. Keep Pip safe for 10 sols!</p>
+        <div style="margin-top:8px">NASA data used: <span class="chip">Curiosity RAD</span><span class="chip">DONKI Flares</span></div>
+        <p style="margin:12px 0 0"><button class="btn big" id="play" aria-label="Play Fixed Mission">PLAY FIXED MISSION</button></p>
+      </div>
+    </div>
+    <div class="hb">
+      <button class="btn sec" id="hHow">HOW TO PLAY</button>
+      <button class="btn sec" id="hRand">RANDOM MISSION</button>
+      <button class="btn sec" id="hCrew">CREW SETTINGS</button>
+      <button class="btn sec" id="hData">DATA & SCIENCE</button>
+      <button class="btn sec" id="hLab">MISSION LAB</button>
+    </div>
+    <p style="text-align:center;font-size:13px;color:var(--ice);margin-top:16px"><label><input type="checkbox" id="rmChk"> Reduce motion</label> · NASA Space Apps Challenge 2026</p>
+  </div>
+</section>
+
+<!-- How to Play Screen -->
+<section class="scr" id="how" role="region" aria-label="How To Play Screen">
+  <div class="card panel">
+    <h2 id="hT"></h2>
+    <p id="hP" style="font-size:18px;min-height:90px;color:var(--cream)"></p>
+    <p class="src" id="hG" style="color:var(--ice)"></p>
+    <div class="hb">
+      <button class="btn sec" id="hPrev">BACK</button>
+      <button class="btn" id="hNext">NEXT</button>
+    </div>
+  </div>
+</section>
+
+<!-- Data and Science Screen -->
+<section class="scr" id="data" role="region" aria-label="Data and Science Screen">
+  <div class="card panel">
+    <h2>DATA AND SCIENCE</h2>
+    <table>
+      <thead>
+        <tr><th>Dataset</th><th>Used for in Game</th><th>Mode</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>NASA DONKI + SDO Flare Records</td><td>Flare days & strength (X3.8, X7.1, X8.7, X9.0)</td><td><span class="snap">SNAPSHOT</span></td></tr>
+        <tr><td>DONKI (Last 7 Days)</td><td>"Sun Right Now" live check</td><td id="liveM"><span class="snap">SNAPSHOT</span></td></tr>
+        <tr><td>Curiosity RAD (SwRI/NASA)</td><td>Radiation baseline & comparison facts</td><td><span class="snap">SNAPSHOT</span></td></tr>
+        <tr><td>Mars Dust: June 2018 Storm</td><td>Dust storm scenario & Opportunity rover fact</td><td><span class="snap">SCENARIO</span></td></tr>
+        <tr><td>Perseverance MOXIE</td><td>Oxygen generation fact</td><td><span class="snap">SNAPSHOT</span></td></tr>
+      </tbody>
+    </table>
+    <p id="liveT" style="margin:12px 0;font-weight:700;color:var(--sun)"></p>
+    <p style="font-size:13px;color:var(--ice); margin-top: 10px; line-height: 1.5;">
+      <b>Mandatory NASA Attribution:</b><br>
+      Space weather: NASA DONKI and NASA SDO. Radiation: Curiosity RAD (NASA/SwRI). Mars weather and rover facts: NASA JPL and the Planetary Data System. Astronaut research: NASA OSDR. Oxygen: Perseverance MOXIE (NASA/JPL/MIT). Game values are scaled for play and are not live measurements unless tagged LIVE. Shake Station is made for the NASA Space Apps Challenge 2026 and is not an official NASA product.
+    </p>
+    <div class="hb"><button class="btn" data-back>BACK TO MENU</button></div>
+  </div>
+</section>
+
+<!-- Mission Lab Screen -->
+<section class="scr" id="lab" role="region" aria-label="Mission Lab Screen">
+  <div class="card panel">
+    <h2>MISSION LAB</h2>
+    <table>
+      <thead>
+        <tr><th>In the Game</th><th>In Real NASA Engineering</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Sun Coins & Battery</td><td>Power budgeting & energy storage. Save power before a dust storm like real rovers!</td></tr>
+        <tr><td>Shield vs. Science</td><td>Protection vs. power. Coins spent on discovery cannot shield against flares.</td></tr>
+        <tr><td>Earth Link Delay</td><td>Signals take minutes to travel between Earth and Mars, so astronauts plan ahead.</td></tr>
+        <tr><td>Black Box Review</td><td>Cause-and-effect analysis used by mission controllers after every flight.</td></tr>
+      </tbody>
+    </table>
+    <div class="hb"><button class="btn" data-back>BACK TO MENU</button></div>
+  </div>
+</section>
+
+<!-- Crew & Audio Settings & Autopilot Screen -->
+<section class="scr" id="crew" role="region" aria-label="Crew and Settings Screen">
+  <div class="card panel">
+    <h2>CREW & MISSION SETTINGS</h2>
+    <label for="nm" style="font-weight:800;color:var(--sun)">Name your astronaut buddy:</label>
+    <input class="nm" id="nm" maxlength="12" value="Pip" aria-label="Astronaut name">
+    
+    <label for="diffSelect" style="font-weight:800;color:var(--sun);margin-top:10px;display:block">Survival Difficulty Mode:</label>
+    <div class="settings-group">
+      <select id="diffSelect" aria-label="Survival Difficulty Mode">
+        <option value="easy">Easy (Forgiving resource drain)</option>
+        <option value="normal" selected>Normal (Balanced experience)</option>
+        <option value="challenge">Challenge (Demanding survival)</option>
+      </select>
+    </div>
+
+    <div class="settings-group">
+      <label>Arm Autopilot (Costs 1 coin/Sol, auto-shields on flares) <input type="checkbox" id="chkAutopilot" aria-label="Arm Autopilot"></label>
+    </div>
+
+    <h3 style="color:var(--teal);margin-top:20px;font-size:16px;">SOUND & AUDIO CONTROLS</h3>
+    <div class="settings-group">
+      <label>Master Sound (ON/OFF) <input type="checkbox" id="chkSound" aria-label="Master Sound"></label>
+      <label>Background Music (BGM) <input type="checkbox" id="chkMusic" aria-label="Background Music"></label>
+      <label>Sound Effects (SFX) <input type="checkbox" id="chkSfx" aria-label="Sound Effects"></label>
+      <label>Music Volume (<span id="valBgmVol">50</span>%) <input type="range" id="rngBgmVol" min="0" max="100" value="50" aria-label="Music Volume"></label>
+      <label>SFX Volume (<span id="valSfxVol">70</span>%) <input type="range" id="rngSfxVol" min="0" max="100" value="70" aria-label="SFX Volume"></label>
+    </div>
+    
+    <div class="hb">
+      <button class="btn" id="nmOk">SAVE SETTINGS</button>
+      <button class="btn sec" data-back>BACK</button>
+    </div>
+  </div>
+</section>
+
+<!-- Briefing Screen -->
+<section class="scr" id="brief" role="region" aria-label="Mission Briefing Screen">
+  <div class="card panel">
+    <h2>GALE CRATER, MARS</h2>
+    <p id="bP" style="font-size:18px;color:var(--cream);line-height:1.6"></p>
+    <button class="btn big" id="go" style="margin-top:20px" aria-label="Launch Mission Now">LAUNCH MISSION NOW</button>
+  </div>
+</section>
+
+<!-- Main Game Cockpit HUD Screen -->
+<section class="scr" id="game" role="region" aria-label="Game Cockpit Screen">
+  <div class="gw">
+    <div class="top">
+      <div class="panel tl" id="tl" aria-label="Mission Timeline"></div>
+      <div class="panel orb" id="orb" aria-label="Orbital status"></div>
+    </div>
+    <div class="stage" id="stage">
+      <button class="notif-btn" id="openNotif" aria-label="Open messages and notifications">📥 MESSAGES <span class="badge" id="notifBadge">0</span></button>
+      <svg id="sc" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Mars outpost at Gale Crater">
+        <defs>
+          <linearGradient id="sk" x1="0" y1="0" x2="0" y2="1">
+            <stop id="s1" offset="0" stop-color="#ffb703"/>
+            <stop id="s2" offset="1" stop-color="#ff9f1c"/>
+          </linearGradient>
+          <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#fff" stop-opacity="1"/>
+            <stop offset="40%" stop-color="#ffb703" stop-opacity="0.8"/>
+            <stop offset="100%" stop-color="#ff8a00" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <rect width="800" height="400" fill="url(#sk)"/>
+        <circle id="earth" cx="690" cy="60" r="5" fill="#8ecae6" opacity="0" filter="drop-shadow(0 0 6px #8ecae6)"/>
+        <circle id="sun" cx="580" cy="80" r="45" fill="url(#sunGlow)"/>
+        <path d="M110 300 L250 150 L330 110 L440 145 L600 300Z" fill="#c1582a"/>
+        <path d="M150 260 L410 260 M190 225 L380 225 M235 190 L365 190 M275 155 L345 155" stroke="#d9785a" stroke-width="6" stroke-linecap="round"/>
+        <path d="M0 280 L100 235 L220 270 L350 225 L490 272 L640 230 L800 272 V400H0Z" fill="#b9501f"/>
+        <path d="M0 325 Q200 295 400 325 T800 315 V400H0Z" fill="#a14c27"/>
+        <rect y="350" width="800" height="50" fill="#7a2a12"/>
+        <g stroke="#415a77" stroke-width="3" fill="#8ecae6">
+          <ellipse cx="640" cy="250" rx="32" ry="9"/>
+          <ellipse cx="640" cy="230" rx="24" ry="7"/>
+          <ellipse cx="640" cy="214" rx="14" ry="5"/>
+          <path d="M640 209 V185" fill="none"/>
+        </g>
+        <circle cx="640" cy="180" r="6" fill="#ff3366" filter="drop-shadow(0 0 8px #ff3366)"/>
+        <path d="M260 355 A68 68 0 0 1 396 355Z" fill="#fefae0" stroke="#d4a373" stroke-width="3"/>
+        <rect x="312" y="318" width="28" height="37" rx="6" fill="#ff9f1c"/>
+        <rect x="352" y="324" width="30" height="15" rx="4" fill="#2ec4b6" id="lamp" filter="drop-shadow(0 0 6px #2ec4b6)"/>
+        <path d="M410 355 A78 68 0 0 1 570 355Z" fill="rgba(46,196,182,0.4)" stroke="#e0ffff" stroke-width="3"/>
+        <g fill="#2cb67d">
+          <circle cx="448" cy="334" r="12"/><circle cx="480" cy="328" r="14"/><circle cx="514" cy="334" r="12"/><circle cx="544" cy="340" r="9"/>
+        </g>
+        <g fill="#3a86ff" stroke="#8ecae6" stroke-width="2">
+          <path d="M670 350 L688 310 L750 310 L734 350Z"/>
+          <path d="M740 350 L758 310 L800 310 L790 350Z"/>
+        </g>
+        <g transform="translate(170, 210) scale(0.95)">
+          <g class="pip" id="pip">
+            <use href="#pb"/>
+            <g id="eyes" stroke="#2ec4b6" stroke-width="5" stroke-linecap="round" fill="none"></g>
+          </g>
+        </g>
+        <circle id="shield" cx="410" cy="305" r="160" fill="rgba(58,134,255,0.15)" stroke="var(--shield)" stroke-width="3.5" stroke-opacity="0" filter="drop-shadow(0 0 20px var(--shield))"/>
+        <rect id="fog" width="800" height="400" fill="#e0662a" opacity="0"/>
+        <g class="dust" id="dust"></g>
+      </svg>
+      <div id="toasts" aria-live="polite"></div>
+      <div id="flash"></div>
+    </div>
+    <div class="pc panel" id="pcard" role="region" aria-label="Astronaut Status"></div>
+    <div class="dock" id="dock" role="region" aria-label="Resource Docks"></div>
+    <div class="bar">
+      <div class="batt" id="batt" role="region" aria-label="Battery Status"></div>
+      <button class="btn big" id="endBtn" aria-label="Shake and End Sol">SHAKE & END SOL</button>
+    </div>
+  </div>
+
+  <!-- Postcard Modal -->
+  <div class="ov" id="pov" role="dialog" aria-modal="true" aria-label="Daily Postcard">
+    <div class="pcw">
+      <div class="flip" id="flip" tabindex="0" role="button" aria-label="Flip postcard">
+        <div class="fc" id="pf"></div>
+        <div class="bk" id="pb2"></div>
+      </div>
+      <p style="text-align:center;font-size:13px;color:var(--ice);margin-top:12px;font-weight:800">✨ Tap postcard to flip & read NASA Science facts ✨</p>
+      <button class="btn big" id="nextDay" style="margin-top:10px" aria-label="Proceed to next sol">PROCEED TO NEXT SOL</button>
+    </div>
+  </div>
+
+  <!-- Smart Notification Drawer Modal -->
+  <div class="ov" id="notifModal" role="dialog" aria-modal="true" aria-label="Messages and Notifications">
+    <div class="card panel">
+      <h2>MESSAGES & NOTIFICATIONS</h2>
+      <div class="notif-list" id="notifList"></div>
+      <div class="hb" style="margin-top:16px"><button class="btn" id="closeNotif" aria-label="Close drawer">CLOSE DRAWER</button></div>
+    </div>
+  </div>
+
+  <!-- Notification Detail Modal -->
+  <div class="ov" id="notifDetailModal" role="dialog" aria-modal="true" aria-label="Notification Details">
+    <div class="card panel">
+      <h3 id="detTitle" style="color:var(--sun);margin-top:0"></h3>
+      <p id="detMeta" style="font-size:12px;color:var(--ice);font-family:Orbitron"></p>
+      <p id="detBody" style="font-size:15px;color:var(--cream);line-height:1.6"></p>
+      <div class="hb" style="margin-top:16px"><button class="btn" id="closeDet" aria-label="Back to messages">BACK TO MESSAGES</button></div>
+    </div>
+  </div>
+
+  <!-- Mission Report / Black Box Modal -->
+  <div class="ov" id="rep" role="dialog" aria-label="Mission Report">
+    <div class="card panel" id="repC"></div>
+  </div>
+</section>
+
+<script>
+(function(){
+"use strict";
+var $ = function(i){ return document.getElementById(i); };
+function ls(k, v) {
+  try {
+    if (v === undefined) return localStorage.getItem(k);
+    localStorage.setItem(k, v);
+  } catch(e) { return null; }
+}
+var rm = ls('ss.rm') === '1' || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+function T(ms){ return rm ? 40 : ms; }
+var pipName = ls('ss.pip') || 'Pip';
+var difficulty = ls('ss.diff') || 'normal';
+var autopilotEnabled = ls('ss.autopilot') === '1';
+var liveR = null, S = null, busy = false, tipT = null;
+
+/* ---------- Enhanced Audio Engine with Event-Based Weather and Sol Sounds ---------- */
+var AudioMgr = (function() {
+  var ctx = null, masterGain = null, bgmGain = null, sfxGain = null;
+  var bgmTimer = null;
+  var activeStormSound = null;
+
+  var sounds = {
+    hover: new Audio('button click sound.mp3'),
+    click: new Audio('button click sound.mp3'),
+    coin: new Audio('coin add sound.mp3'),
+    popup: new Audio('Menu Sound.wav'),
+    alloc: new Audio('flipcard appearing sound.mp3'),
+    nextSol: new Audio('Loading sound.wav'),
+    notif: new Audio('Menu Sound.wav'),
+    flare: new Audio('Flare sound.wav'),
+    storm: new Audio('Dust storm sound.wav'),
+    success: new Audio('good day sound.mp3'),
+    error: new Audio('angry-roblox.mp3'),
+    badge: new Audio('good day sound.mp3'),
+    paused: new Audio('Mission paused sound.mp3'),
+    postcardFlip: new Audio('Postcard flip sound.wav'),
+    glitch: new Audio('Opening glitch sound.wav'),
+    sigh: new Audio('disappointed-sigh-storybook-weaver-deluxe.mp3.mpeg')
+  };
+
+  Object.keys(sounds).forEach(function(k){
+    sounds[k].preload = 'auto';
+  });
+
+  function init() {
+    if (ctx) return;
+    try {
+      ctx = new (window.AudioContext || window.webkitAudioContext)();
+      masterGain = ctx.createGain();
+      bgmGain = ctx.createGain();
+      sfxGain = ctx.createGain();
+
+      bgmGain.connect(masterGain);
+      sfxGain.connect(masterGain);
+      masterGain.connect(ctx.destination);
+      applySettings();
+    } catch(e) {}
+  }
+
+  function resume() {
+    if (ctx && ctx.state === 'suspended') {
+      ctx.resume();
+    }
+  }
+
+  function applySettings() {
+    if (!masterGain) return;
+    var soundOn = ls('ss.sound') === '1';
+    var musicOn = ls('ss.bgm') === '1';
+    var sfxOn = ls('ss.sfx') === '1';
+    var bgmVol = +(ls('ss.bgmVol') || 50) / 100;
+    var sfxVol = +(ls('ss.sfxVol') || 70) / 100;
+
+    masterGain.gain.value = soundOn ? 1 : 0;
+    bgmGain.gain.value = musicOn ? bgmVol : 0;
+    
+    var effectiveSfxVol = sfxOn ? sfxVol : 0;
+    Object.keys(sounds).forEach(function(k){
+      sounds[k].volume = effectiveSfxVol;
+    });
+
+    if (soundOn && musicOn) {
+      startBgm();
+    } else {
+      stopBgm();
+    }
+  }
+
+  function playSfx(type) {
+    init();
+    if (ls('ss.sound') !== '1' || ls('ss.sfx') !== '1') return;
+    resume();
+
+    var snd = sounds[type] || sounds['click'];
+    try {
+      snd.currentTime = 0;
+      snd.play().catch(function(){});
+    } catch(e) {}
+  }
+
+  function playStormAtmosphere(isStorm) {
+    init();
+    if (ls('ss.sound') !== '1' || ls('ss.sfx') !== '1') {
+      if (activeStormSound) { activeStormSound.pause(); activeStormSound = null; }
+      return;
+    }
+    resume();
+
+    if (isStorm) {
+      if (!activeStormSound) {
+        activeStormSound = sounds['storm'];
+        activeStormSound.loop = true;
+        activeStormSound.play().catch(function(){});
+      }
+    } else {
+      if (activeStormSound) {
+        activeStormSound.pause();
+        activeStormSound.currentTime = 0;
+        activeStormSound = null;
+      }
+    }
+  }
+
+  function playMoodSfx(mood) {
+    init();
+    if (ls('ss.sound') !== '1' || ls('ss.sfx') !== '1') return;
+    resume();
+    try {
+      if (mood === 'happy' || mood === 'evacuated') {
+        sounds['success'].currentTime = 0;
+        sounds['success'].play().catch(function(){});
+      } else if (mood === 'angry' || mood === 'sad') {
+        sounds['sigh'].currentTime = 0;
+        sounds['sigh'].play().catch(function(){});
+      } else if (mood === 'scared' || mood === 'worried') {
+        sounds['error'].currentTime = 0;
+        sounds['error'].play().catch(function(){});
+      }
+    } catch(e) {}
+  }
+
+  function startBgm() {
+    if (bgmTimer) return;
+    bgmTimer = setInterval(function(){
+      if (!ctx || ls('ss.sound') !== '1' || ls('ss.bgm') !== '1') return;
+      try {
+        sounds['Menu Sound.wav'].currentTime = 0;
+        sounds['Menu Sound.wav'].play().catch(function(){});
+      } catch(e) {}
+    }, 15000);
+  }
+
+  function stopBgm() {
+    if (bgmTimer) {
+      clearInterval(bgmTimer);
+      bgmTimer = null;
+    }
+    if (activeStormSound) {
+      activeStormSound.pause();
+      activeStormSound = null;
+    }
+  }
+
+  return {
+    init: init,
+    resume: resume,
+    applySettings: applySettings,
+    playSfx: playSfx,
+    playStormAtmosphere: playStormAtmosphere,
+    playMoodSfx: playMoodSfx
+  };
+})();
+
+/* ---------- Datasets & Mission Generation ---------- */
+var FL = {
+  a: { cls: 'X3.8', date: '9 February 2024', spike: 20 },
+  b: { cls: 'X8.7', date: '14 May 2024', spike: 38 },
+  c: { cls: 'X7.1', date: '1 October 2024', spike: 32 },
+  d: { cls: 'X9.0', date: '3 October 2024', spike: 40 }
+};
+
+var FACTS = {
+  rad: { t: "Curiosity measured about 0.67 millisieverts of radiation per day on the surface of Mars.", s: "NASA Curiosity RAD / SwRI, 2013" },
+  sol: { t: "One Mars day, called a sol, lasts about 24 hours and 39 minutes.", s: "NASA Mars mission reports" },
+  opp: { t: "In June 2018 a global dust storm blocked the Sun for Opportunity. Its last contact was June 10.", s: "NASA JPL; NTRS 20210015954" },
+  cur: { t: "Curiosity runs on nuclear power, so the 2018 dust storm did not cut its power.", s: "NASA coverage, 2018" },
+  moxie: { t: "Perseverance's MOXIE made 122 grams of oxygen from Mars air over 16 runs.", s: "NASA JPL, Sept 2023" },
+  x9: { t: "On 3 October 2024 the Sun released an X9.0 flare, the strongest of Solar Cycle 25 at that time.", s: "NASA Science; NOAA" },
+  xc: { t: "X-class flares are the strongest kind. The number tells you how strong a flare is within the class.", s: "NASA Science" },
+  iss: { t: "Astronauts on the space station get roughly 0.4 to 1.0 millisieverts of radiation per day.", s: "RAD team statement, 2012" },
+  max: { t: "NASA and NOAA announced the Sun reached solar maximum in October 2024.", s: "NASA / NOAA" }
+};
+
+var TIPS = [
+  ['REAL NASA FACT', 'One Mars day (sol) is 24 hours and 39 minutes long!'],
+  ['GAME TIP', 'Unspent Sun Coins stay in your battery. Save power before dust storms!'],
+  ['REAL NASA FACT', 'On 3 Oct 2024, the Sun released an X9.0 solar flare recorded by SDO!'],
+  ['GAME TIP', 'Earth warnings take 12 minutes each way and can arrive late. Plan ahead!'],
+  ['REAL NASA FACT', 'Perseverance MOXIE produced oxygen successfully on Mars!']
+];
+
+var DIFFS = {
+  easy: { lifeDrainMult: 0.7, foodDrainMult: 0.7, radMult: 0.8 },
+  normal: { lifeDrainMult: 1.0, foodDrainMult: 1.0, radMult: 1.0 },
+  challenge: { lifeDrainMult: 1.3, foodDrainMult: 1.3, radMult: 1.25 }
+};
+
+var R = { cap: 12, inc: { clear: 6, hazy: 4, storm: 2 }, lifeNeed: 2, lifeRate: 20, foodNeed: 1, foodRate: 12, foodDrain: 4, doseBase: 4, cut: 0.3, sci: 10 };
+
+function fixedMission() {
+  return [
+    { d: 1, w: 'clear', f: null, late: false },
+    { d: 2, w: 'clear', f: null, late: false },
+    { d: 3, w: 'hazy',  f: FL.a, late: false },
+    { d: 4, w: 'storm', f: null, late: false },
+    { d: 5, w: 'storm', f: null, late: false },
+    { d: 6, w: 'hazy',  f: FL.b, late: true  },
+    { d: 7, w: 'clear', f: null, late: false },
+    { d: 8, w: 'clear', f: FL.d, late: false },
+    { d: 9, w: 'clear', f: null, late: false },
+    { d: 10,w: 'clear', f: null, late: false }
+  ];
+}
+
+function seededRandomMission(seed) {
+  function lcg(s) {
+    return function() {
+      s = (s * 1664525 + 1013904223) % 4294967296;
+      return s / 4294967296;
+    };
+  }
+  var rnd = lcg(seed);
+  var schedule = [];
+  for (var i = 1; i <= 10; i++) {
+    schedule.push({ d: i, w: 'clear', f: null, late: false });
+  }
+
+  var stormBlocks = 1 + Math.floor(rnd() * 2);
+  var startDay = 3 + Math.floor(rnd() * 3);
+  for (var b = 0; b < stormBlocks; b++) {
+    var length = 2 + Math.floor(rnd() * 2);
+    for (var l = 0; l < length && startDay + l <= 9; l++) {
+      schedule[startDay + l - 1].w = 'storm';
+      if (startDay + l - 2 >= 0 && schedule[startDay + l - 2].w === 'clear') {
+        schedule[startDay + l - 2].w = 'hazy';
+      }
+    }
+    startDay += length + 3;
+  }
+
+  var flareCount = 2 + Math.floor(rnd() * 2);
+  var flareKeys = Object.keys(FL);
+  var placedFlares = [];
+  var attempts = 0;
+  while (placedFlares.length < flareCount && attempts < 50) {
+    attempts++;
+    var fd = 2 + Math.floor(rnd() * 8);
+    var tooClose = placedFlares.some(function(df){ return Math.abs(df - fd) <= 1; });
+    if (!tooClose) {
+      placedFlares.push(fd);
+      var k = flareKeys[Math.floor(rnd() * flareKeys.length)];
+      schedule[fd - 1].f = FL[k];
+      schedule[fd - 1].late = rnd() < 0.3;
+    }
+  }
+
+  return schedule;
+}
+
+/* ---------- High Score & Leaderboard Helpers ---------- */
+function getLeaderboard() {
+  try {
+    var data = ls('ss.leaderboard');
+    return data ? JSON.parse(data) : [];
+  } catch(e) { return []; }
+}
+
+function saveScore(name, score, badge) {
+  var lb = getLeaderboard();
+  lb.push({ name: name, score: score, badge: badge, date: new Date().toLocaleDateString() });
+  lb.sort(function(a, b){ return b.score - a.score; });
+  if (lb.length > 5) lb = lb.slice(0, 5);
+  ls('ss.leaderboard', JSON.stringify(lb));
+}
+
+/* ---------- Live DONKI Check with 3s Timeout ---------- */
+function live() {
+  return new Promise(function(res){
+    try {
+      var controller = new AbortController();
+      var timeoutId = setTimeout(function(){ controller.abort(); }, 3000);
+      var end = new Date(), start = new Date(end - 7 * 864e5);
+      var fmt = function(d){ return d.toISOString().slice(0,10); };
+      fetch('https://api.nasa.gov/DONKI/FLR?startDate=' + fmt(start) + '&endDate=' + fmt(end) + '&api_key=DEMO_KEY', { signal: controller.signal })
+        .then(function(response){
+          clearTimeout(timeoutId);
+          if (!response.ok) throw new Error('API Error');
+          return response.json();
+        })
+        .then(function(data){
+          var rank = {A:1, B:2, C:3, M:4, X:5}, best = null;
+          (data || []).forEach(function(x){
+            var k = x.classType || '';
+            if (!best || (rank[k[0]] || 0) > (rank[best[0]] || 0) || ((rank[k[0]] || 0) === (rank[best[0]] || 0) && parseFloat(k.slice(1)) > parseFloat(best.slice(1)))) {
+              best = k;
+            }
+          });
+          res({ n: (data || []).length, top: best });
+        })
+        .catch(function(){ res(null); });
+    } catch(err) { res(null); }
+  });
+}
+
+/* ---------- Boot Sequence ---------- */
+var armed = false;
+function boot() {
+  AudioMgr.init();
+  $('boot').classList.add('on');
+  var L = ['SHAKE STATION OS v2.0 - MARS HELD', 'Checking life support matrix... OK', 'Activating 3D radiation shields... OK', 'Linking with Earth Deep Space Network...', 'Loading Curiosity RAD & DONKI telemetry...'], i = 0, el = $('bootL');
+  el.style.whiteSpace = 'pre-line'; el.textContent = '';
+  (function nx() {
+    if (i < L.length) { el.textContent += L[i++] + '\n'; setTimeout(nx, T(300)); }
+    else { $('bootLogo').classList.add('on'); $('bootTag').textContent = 'Shake the globe. Survive the sky.'; $('tapBtn').classList.add('on'); armed = true; AudioMgr.playSfx('glitch'); }
+  })();
+}
+function leaveBoot() {
+  if (!armed) return;
+  armed = false;
+  AudioMgr.playSfx('click');
+  loading();
+}
+$('boot').addEventListener('click', leaveBoot);
+document.addEventListener('keydown', function(e){ if ($('boot').classList.contains('on') && (e.key === 'Enter' || e.key === ' ')) leaveBoot(); });
+
+/* ---------- Loading Screen ---------- */
+function loading() {
+  var a = document.querySelectorAll('.scr'); for (var i = 0; i < a.length; i++) a[i].classList.remove('on');
+  $('loading').classList.add('on');
+  var sg = $('segs'); sg.innerHTML = ''; for (var j = 0; j < 12; j++) sg.appendChild(document.createElement('b'));
+  var st = [], lg = $('lgo'); lg.disabled = true;
+  function fill(n) { var b = sg.children; for (var k = 0; k < 12; k++) b[k].className = k < n ? 'f' : ''; }
+  function step(m, n) { st.push(m); $('lst').textContent = st.join('\n'); fill(n); }
+  step('Initializing 3D Cockpit HUD... done', 4);
+  setTimeout(function(){ step('Loading NASA Gale Crater snapshot... done', 8); AudioMgr.playSfx('alloc'); }, T(400));
+  var ti = 0;
+  function tip() { var t = TIPS[ti++ % TIPS.length]; $('tip').innerHTML = '<span class="tag">' + t[0] + '</span>' + t[1]; }
+  tip(); clearInterval(tipT); tipT = setInterval(tip, 3500);
+  live().then(function(r){ liveR = r; step('Checking live space weather... ' + (r ? 'LIVE' : 'SNAPSHOT (offline)'), 12); lg.disabled = false; AudioMgr.playSfx('success'); });
+}
+$('lgo').onclick = function(){ clearInterval(tipT); AudioMgr.playSfx('click'); home(); };
+
+/* ---------- Screens Navigation ---------- */
+function show(id) {
+  var a = document.querySelectorAll('.scr'); for (var i = 0; i < a.length; i++) a[i].classList.remove('on');
+  $(id).classList.add('on');
+  AudioMgr.playSfx('click');
+}
+function home() { show('home'); $('rmChk').checked = rm; AudioMgr.playStormAtmosphere(false); }
+$('rmChk').onchange = function(){ rm = this.checked; ls('ss.rm', rm ? '1' : '0'); document.body.classList.toggle('rm', rm); AudioMgr.playSfx('click'); };
+document.body.classList.toggle('rm', rm);
+document.querySelectorAll('[data-back]').forEach(function(b){ b.onclick = function(){ AudioMgr.playSfx('click'); home(); }; });
+
+var HOW = [
+  ['1. READ THE SKY', 'Check today\'s weather forecast and Earth\'s message. Remember, Earth signals take 12 minutes each way!', 'Sol = one Mars day (24 hours 39 minutes).'],
+  ['2. SPEND SUN COINS', 'Allocate your Sun Coins to Life Support, Food, Shield, and Science. Unspent coins stay in your battery!', 'Radiation = invisible energy from the Sun that harms living cells.'],
+  ['3. SHAKE & SURVIVE', 'Click "Shake & End Sol" to process the day. Keep Pip safe for 10 Martian sols!', 'Solar flare = sudden burst of high-energy radiation from the Sun.']
+], hi = 0;
+
+function how() { show('how'); hi = 0; hrender(); AudioMgr.playSfx('popup'); }
+function hrender() { var h = HOW[hi]; $('hT').textContent = h[0]; $('hP').textContent = h[1]; $('hG').textContent = 'Glossary: ' + h[2]; $('hNext').textContent = hi === 2 ? 'START EXPLORING' : 'NEXT'; }
+$('hNext').onclick = function(){ AudioMgr.playSfx('click'); if (hi < 2) { hi++; hrender(); } else home(); };
+$('hPrev').onclick = function(){ AudioMgr.playSfx('click'); if (hi > 0) { hi--; hrender(); } else home(); };
+
+function dataScr() {
+  show('data');
+  AudioMgr.playSfx('popup');
+  $('liveT').innerHTML = liveR ? '<span class="live">LIVE</span> Sun right now: ' + liveR.n + ' flare(s) in last 7 days' + (liveR.top ? ', strongest class ' + liveR.top : '') + ' (NASA DONKI).' : 'Live space weather unavailable; using verified offline NASA snapshot.';
+  $('liveM').innerHTML = liveR ? '<span class="live">LIVE</span>' : '<span class="snap">SNAPSHOT</span>';
+}
+$('hHow').onclick = how; $('hData').onclick = dataScr; $('hLab').onclick = function(){ show('lab'); AudioMgr.playSfx('popup'); };
+
+/* ---------- Crew & Audio Settings & Autopilot Handling ---------- */
+$('hCrew').onclick = function(){
+  $('nm').value = pipName;
+  $('diffSelect').value = difficulty;
+  $('chkAutopilot').checked = autopilotEnabled;
+  $('chkSound').checked = ls('ss.sound') === '1';
+  $('chkMusic').checked = ls('ss.bgm') === '1';
+  $('chkSfx').checked = ls('ss.sfx') === '1';
+  var bgmVol = ls('ss.bgmVol') || '50';
+  var sfxVol = ls('ss.sfxVol') || '70';
+  $('rngBgmVol').value = bgmVol;
+  $('valBgmVol').textContent = bgmVol;
+  $('rngSfxVol').value = sfxVol;
+  $('valSfxVol').textContent = sfxVol;
+  show('crew');
+  AudioMgr.playSfx('popup');
+};
+
+$('rngBgmVol').oninput = function(){ $('valBgmVol').textContent = this.value; ls('ss.bgmVol', this.value); AudioMgr.applySettings(); };
+$('rngSfxVol').oninput = function(){ $('valSfxVol').textContent = this.value; ls('ss.sfxVol', this.value); AudioMgr.applySettings(); AudioMgr.playSfx('hover'); };
+$('chkSound').onchange = function(){ ls('ss.sound', this.checked ? '1' : '0'); AudioMgr.applySettings(); AudioMgr.playSfx('click'); };
+$('chkMusic').onchange = function(){ ls('ss.bgm', this.checked ? '1' : '0'); AudioMgr.applySettings(); AudioMgr.playSfx('click'); };
+$('chkSfx').onchange = function(){ ls('ss.sfx', this.checked ? '1' : '0'); AudioMgr.applySettings(); AudioMgr.playSfx('click'); };
+
+$('nmOk').onclick = function(){
+  pipName = ($('nm').value || 'Pip').slice(0, 12);
+  difficulty = $('diffSelect').value;
+  autopilotEnabled = $('chkAutopilot').checked;
+  ls('ss.pip', pipName);
+  ls('ss.diff', difficulty);
+  ls('ss.autopilot', autopilotEnabled ? '1' : '0');
+  AudioMgr.playSfx('success');
+  home();
+};
+
+document.querySelectorAll('.tabs button').forEach(function(b){
+  b.onclick = function(){
+    AudioMgr.playSfx('click');
+    var t = b.dataset.t;
+    document.querySelectorAll('.tabs button').forEach(function(x){ x.className = x === b ? 'a' : ''; });
+    if (t === 'crew') $('hCrew').click();
+    if (t === 'data') dataScr();
+  };
+});
+
+$('play').onclick = function(){ AudioMgr.playSfx('click'); brief(true); };
+$('hRand').onclick = function(){ AudioMgr.playSfx('click'); brief(false); };
+
+var isFixedMissionMode = true;
+function brief(isFixed) {
+  isFixedMissionMode = isFixed;
+  var missionSchedule = isFixed ? fixedMission() : seededRandomMission(Math.floor(Math.random() * 99999));
+  S = {
+    seed: Math.floor(Math.random() * 99999), day: 1, batt: 6, life: 100, food: 100, dose: 0, sci: 0,
+    alloc: { life: 2, food: 1, shield: 1, sci: 0 },
+    sch: missionSchedule,
+    log: [], cards: [], notifs: [], warn: {}, over: false, fail: null, lastMood: null, processedDays: {}, generatedPostcards: {}
+  };
+  $('bP').textContent = (isFixed ? 'Fixed Mission Scenario (Gale Crater reproduced schedule). ' : 'Seeded Random Mission. ') + 'Difficulty: ' + difficulty.toUpperCase() + '. Autopilot: ' + (autopilotEnabled ? 'ARMED' : 'DISARMED') + '. Your mission: Keep ' + pipName + ' safe for 10 sols!';
+  show('brief');
+  AudioMgr.playSfx('popup');
+}
+$('go').onclick = function(){ AudioMgr.playSfx('click'); show('game'); dawn(); };
+
+/* ---------- Smart Notification System ---------- */
+function addNotif(title, body, category, sol) {
+  if (!S) return;
+  var notif = {
+    id: Date.now() + Math.random(),
+    title: title,
+    body: body,
+    category: category || 'Mission Alert',
+    sol: sol || S.day,
+    read: false,
+    time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+  };
+  S.notifs.unshift(notif);
+  updateNotifBadge();
+  toast('📥 New Message: ' + title);
+  AudioMgr.playSfx('notif');
+}
+
+function updateNotifBadge() {
+  if (!S || !S.notifs) return;
+  var unread = S.notifs.filter(function(n){ return !n.read; }).length;
+  var badge = $('notifBadge');
+  if (badge) badge.textContent = unread;
+}
+
+function renderNotifList() {
+  if (!S || !S.notifs) return;
+  var list = $('notifList');
+  if (!list) return;
+  if (S.notifs.length === 0) {
+    list.innerHTML = '<p style="text-align:center;color:var(--ice)">No messages in inbox.</p>';
+    return;
+  }
+  list.innerHTML = S.notifs.map(function(n){
+    return '<div class="notif-item ' + (n.read ? '' : 'unread') + '" data-id="' + n.id + '">' +
+           '<div class="notif-meta"><span>[' + n.category + '] · Sol ' + n.sol + '</span><span>' + n.time + '</span></div>' +
+           '<b>' + n.title + '</b>' +
+           '</div>';
+  }).join('');
+
+  list.querySelectorAll('.notif-item').forEach(function(el){
+    el.onclick = function(){
+      AudioMgr.playSfx('click');
+      var id = +el.dataset.id;
+      var found = S.notifs.find(function(x){ return x.id === id; });
+      if (found) {
+        found.read = true;
+        updateNotifBadge();
+        renderNotifList();
+        $('detTitle').textContent = found.title;
+        $('detMeta').textContent = '[' + found.category + '] · Sol ' + found.sol + ' · ' + found.time;
+        $('detBody').textContent = found.body;
+        $('notifModal').classList.remove('on');
+        $('notifDetailModal').classList.add('on');
+      }
+    };
+  });
+}
+
+$('openNotif').onclick = function(){ AudioMgr.playSfx('click'); renderNotifList(); $('notifModal').classList.add('on'); };
+$('closeNotif').onclick = function(){ AudioMgr.playSfx('click'); $('notifModal').classList.remove('on'); };
+$('closeDet').onclick = function(){ AudioMgr.playSfx('click'); $('notifDetailModal').classList.remove('on'); $('notifModal').classList.add('on'); };
+
+/* ---------- Game Loop & Earth Communications & Autopilot ---------- */
+var SYS = [{k:'life', n:'LIFE SUPPORT', i:'🫧'}, {k:'food', n:'FOOD CROPS', i:'🌿'}, {k:'shield', n:'RAD SHIELD', i:'🛡️'}, {k:'sci', n:'SCIENCE', i:'🔭'}];
+function cur() { return S.sch[S.day - 1]; }
+function income() { return R.inc[cur().w]; }
+function spent() { var a = S.alloc; return a.life + a.food + a.shield + a.sci; }
+function avail() { return S.batt + income(); }
+
+function earth() {
+  var d = S.day, td = cur(), tm = S.sch[d], m = { text: '', late: false, warn: false };
+  if (td.f && td.late) { m.late = true; m.text = 'Message delayed (12 min light-speed lag)! Earth\'s warning about today\'s ' + td.f.cls + ' flare arrived late.'; return m; }
+  if (tm) {
+    if (tm.f && !tm.late) { m.warn = true; m.text = 'EARTH COMMS (12-min delay): FLARE WARNING. An X-class flare is expected tomorrow. Prepare shields!'; return m; }
+    if (tm.w === 'storm' && td.w !== 'storm') { m.warn = true; m.text = 'EARTH COMMS: DUST STORM WARNING. A severe storm arrives tomorrow. Save power!'; return m; }
+    if (tm.w === 'hazy' && td.w === 'clear') { m.text = 'EARTH COMMS: Hazy skies forecast for tomorrow.'; return m; }
+  }
+  m.text = d === 10 ? 'Final sol! Orbital rendezvous standing by.' : 'Earth link stable. All telemetry nominal for tomorrow.';
+  return m;
+}
+
+function toast(t, r) {
+  var e = document.createElement('div'); e.className = 'toast' + (r ? ' r' : ''); e.textContent = t;
+  var ts = $('toasts'); if (ts) { ts.appendChild(e); setTimeout(function(){ e.remove(); }, T(4000)); }
+}
+
+function dawn() {
+  busy = false;
+  
+  // Autopilot Logic
+  if (autopilotEnabled && S.batt >= 1 && cur().f) {
+    var totalAlloc = spent() - S.alloc.shield;
+    if (totalAlloc + 3 <= avail()) {
+      S.alloc.shield = 3;
+      S.batt = Math.max(0, S.batt - 1);
+      addNotif('Autopilot Active', 'Autopilot engaged 1 coin to max out Radiation Shield for incoming flare.', 'Mission Alert', S.day);
+    }
+  }
+
+  var o = ['life','food','shield','sci'], t = spent(), a = avail(), i = 0;
+  while (t > a && i < 40) { var k = o[3 - (i % 4)]; if (S.alloc[k] > 0) { S.alloc[k]--; t--; } i++; }
+  S.em = earth(); if (S.em.warn) S.warn[S.day + 1] = true;
+  sky('dawn'); render(); $('endBtn').disabled = false;
+  
+  addNotif('Earth Transmission', S.em.text, 'NASA / Earth', S.day);
+  if (S.em.late) { addNotif('Solar Interference Warning', 'Transmission delayed by space weather.', 'Weather Updates', S.day); AudioMgr.playSfx('flare'); }
+  if (cur().f) { addNotif('Solar Flare Alert', 'Active solar flare inbound! Raise radiation shields.', 'Solar Flare', S.day); AudioMgr.playSfx('flare'); }
+  if (cur().w === 'storm') {
+    addNotif('Dust Storm Warning', 'Gale Crater experiencing severe dust reduction.', 'Weather Updates', S.day);
+    AudioMgr.playStormAtmosphere(true);
+  } else {
+    AudioMgr.playStormAtmosphere(false);
+  }
+
+  if (S.batt < 3 && cur().w === 'storm') {
+    addNotif('Survival Tip', 'Keep enough energy for essential life support and manage food supplies before storm days!', 'Educational Tips', S.day);
+  }
+}
+
+/* ---------- Dynamic Pip Mood Priority System ---------- */
+function getPipMood() {
+  if (S.fail) return 'evacuated';
+  if (S.dose >= 70 || S.life <= 30 || S.food <= 30 || cur().f) return 'scared';
+  var mismanagement = S.log.filter(function(l){ return l.a.life < 2 || l.a.food < 1; }).length;
+  if (mismanagement >= 2) return 'angry';
+  if (S.life <= 50 || S.food <= 50 || S.dose >= 40) return 'sad';
+  if (cur().w === 'storm' || (S.life > 30 && S.life <= 60) || (S.food > 30 && S.food <= 60)) return 'worried';
+  return 'happy';
+}
+
+var EYES = {
+  happy: '<path d="M-24 0 q8 -14 16 0 M8 0 q8 -14 16 0"/><path d="M-7 14 q7 7 14 0" stroke-width="4"/>',
+  worried: '<circle cx="-14" cy="2" r="5" fill="#2ec4b6" stroke="none"/><circle cx="14" cy="2" r="5" fill="#2ec4b6" stroke="none"/><path d="M-22 -10 l16 5 M22 -10 l-16 5 M-7 18 q7 -7 14 0" stroke-width="3.5"/>',
+  sad: '<circle cx="-14" cy="2" r="5" fill="#3a86ff" stroke="none"/><circle cx="14" cy="2" r="5" fill="#3a86ff" stroke="none"/><path d="M-7 22 q7 -7 14 0" stroke-width="3.5"/><path d="M-20 -12 l14 4 M20 -12 l-14 4" stroke-width="3"/>',
+  angry: '<circle cx="-14" cy="2" r="5" fill="#ff3366" stroke="none"/><circle cx="14" cy="2" r="5" fill="#ff3366" stroke="none"/><path d="M-22 -14 l16 8 M22 -14 l-16 8 M-7 18 q7 7 14 0" stroke-width="3.5"/>',
+  scared: '<circle cx="-14" cy="2" r="8" stroke-width="3"/><circle cx="14" cy="2" r="8" stroke-width="3"/><path d="M-7 20 q7 -10 14 0" stroke-width="3.5"/>',
+  evacuated: '<path d="M-20 -4 q14 -10 28 0" stroke-width="4"/><circle cx="-12" cy="4" r="3"/><circle cx="12" cy="4" r="3"/>'
+};
+
+function render() {
+  var d = S.day, tl = '';
+  for (var i = 1; i <= 10; i++) {
+    var cl = i < d ? 'dn' : i === d ? 'td' : S.warn[i] ? 'wn' : '';
+    tl += '<div class="' + cl + '">SOL ' + i + (S.warn[i] ? '<br>⚠️' : '') + '</div>';
+  }
+  $('tl').innerHTML = tl;
+  var w = cur().w;
+  $('orb').innerHTML = '<span>' + (w === 'storm' ? '🌪️' : w === 'hazy' ? '🌫️' : '☀️') + '</span>GALE CRATER<br>SOL ' + d + ' / 10';
+
+  var sp = spent(), left = avail() - sp, save = Math.min(R.cap, left), h = '';
+  var M = { life: S.life, food: S.food, shield: 100 - S.dose, sci: Math.min(100, S.sci / 2) };
+  
+  SYS.forEach(function(s){
+    var a = S.alloc[s.k], v = Math.round(M[s.k] / 10), ms = '';
+    for (var j = 0; j < 10; j++) {
+      ms += '<i style="' + (j < v ? 'background:var(--' + (s.k==='life'?'teal':s.k==='food'?'leaf':s.k==='shield'?'shield':'sci') + '); box-shadow: 0 0 8px var(--' + (s.k==='life'?'teal':s.k==='food'?'leaf':s.k==='shield'?'shield':'sci') + ')' : '') + '"></i>';
+    }
+    var hint = s.k==='life'?'Air & heat: ' + sg((a-R.lifeNeed)*R.lifeRate) + ' /day':s.k==='food'?'Crops: ' + sg((a-R.foodNeed)*R.foodRate-R.foodDrain) + ' /day':s.k==='shield'?'Radiation: +' + Math.max(0,R.doseBase-a) + ' /day':'Discovery: +' + (a*R.sci) + ' pts';
+    var mx = s.k==='sci'?2:3;
+    h += '<div class="panel dk"><div class="ic">' + s.i + '</div><b>' + s.n + '</b><div class="mt" aria-hidden="true">' + ms + '</div><div class="ct"><button data-k="' + s.k + '" data-d="-1" aria-label="Decrease ' + s.n + '"' + (a<=0?' disabled':'') + '>–</button><span>' + a + '</span><button data-k="' + s.k + '" data-d="1" aria-label="Increase ' + s.n + '"' + (left<=0||a>=mx?' disabled':'') + '>＋</button></div><small>' + hint + '</small></div>';
+  });
+  $('dock').innerHTML = h;
+
+  var batt = '<span style="min-width:180px">Coins to spend: <b>' + left + '</b><br>Battery reserve: <b>' + save + '</b></span><b>';
+  for (i = 0; i < R.cap; i++) batt += '<i class="' + (i < save ? 'f' : i < save + sp ? 'p' : '') + '"></i>';
+  $('batt').innerHTML = batt + '</b>';
+
+  var moodType = getPipMood();
+  if (S.lastMood !== moodType) {
+    S.lastMood = moodType;
+    AudioMgr.playMoodSfx(moodType);
+  }
+
+  var eyes = $('eyes'); if (eyes) eyes.innerHTML = EYES[moodType];
+  var shield = $('shield');
+  if (shield) {
+    var sVal = S.alloc.shield;
+    shield.setAttribute('fill-opacity', sVal * 0.08);
+    shield.setAttribute('stroke-opacity', sVal * 0.35);
+  }
+
+  var moodLabels = {
+    happy: pipName + ' is Happy! ✨',
+    worried: pipName + ' is Worried... ⚡',
+    sad: pipName + ' is Sad. 💧',
+    angry: pipName + ' is Frustrated! 💢',
+    scared: pipName + ' is Scared! 🚨',
+    evacuated: pipName + ' is Safe (Evacuated). 🚀'
+  };
+
+  var says = {
+    happy: 'All systems nominal. Ready for exploration!',
+    worried: 'Visibility is dropping... let\'s hold steady!',
+    sad: 'Resources are running low. We need help...',
+    angry: 'We keep falling behind on life support!',
+    scared: 'Solar flare detected! Shields up maximum!',
+    evacuated: 'I am safe! Mission paused.'
+  };
+
+  $('pcard').innerHTML = '<b>' + moodLabels[moodType] + '</b><br>' + says[moodType] + '<br><span style="color:var(--ice);font-size:13px">' + (S.em ? '📨 ' + S.em.text : '') + '</span>';
+  updateNotifBadge();
+}
+
+function sg(n){ return (n >= 0 ? '+' : '') + n; }
+
+function sky(t) {
+  var w = cur().w, P = { dawn: ['#ff9f1c', '#e76f51'], day: ['#ffb703', '#f4a261'], dusk: ['#264653', '#e76f51'] }[t];
+  var s1 = $('s1'), s2 = $('s2');
+  if (s1 && s2 && P) { s1.style.stopColor = P[0]; s2.style.stopColor = P[1]; }
+  var fog = $('fog'); if (fog) fog.setAttribute('opacity', w === 'storm' ? 0.5 : w === 'hazy' ? 0.2 : 0);
+  var sun = $('sun'); if (sun) sun.setAttribute('opacity', w === 'storm' ? 0.25 : t === 'dusk' ? 0.4 : 1);
+  var earth = $('earth'); if (earth) earth.setAttribute('opacity', t === 'day' ? 0 : 1);
+  var lamp = $('lamp'); if (lamp) lamp.setAttribute('fill', t === 'dusk' ? '#ffd166' : '#2ec4b6');
+  var dd = $('dust');
+  if (dd) {
+    dd.innerHTML = '';
+    if (w === 'storm') {
+      for (var i = 0; i < 32; i++) {
+        var l = document.createElementNS('http://www.w3.org/2000/svg', 'line'), y = 10 + Math.random() * 380, x = Math.random() * 800;
+        l.setAttribute('x1', x - 80); l.setAttribute('x2', x); l.setAttribute('y1', y); l.setAttribute('y2', y);
+        l.style.animationDelay = (-Math.random()).toFixed(2) + 's';
+        dd.appendChild(l);
+      }
+    }
+  }
+}
+
+$('dock').addEventListener('click', function(e){
+  var b = e.target.closest('button');
+  if (!b || busy) return;
+  var k = b.dataset.k, d = +b.dataset.d, n = S.alloc[k] + d;
+  if (n < 0 || n > (k === 'sci' ? 2 : 3)) return;
+  if (d > 0 && spent() >= avail()) { AudioMgr.playSfx('error'); return; }
+  if (d > 0) {
+    AudioMgr.playSfx('coin');
+    var rect = b.getBoundingClientRect(), c = document.createElement('div');
+    c.className = 'coin'; c.style.left = rect.left + 'px'; c.style.top = rect.top + 'px'; document.body.appendChild(c);
+    c.animate([{transform:'translate(0,0)', opacity:1}, {transform:'translate(-100px,-150px)', opacity:0}], {duration:400}).onfinish = function(){ c.remove(); };
+  } else {
+    AudioMgr.playSfx('alloc');
+  }
+  S.alloc[k] = n;
+  render();
+});
+
+document.addEventListener('mouseover', function(e){
+  var btn = e.target.closest('button');
+  if (btn) {
+    AudioMgr.playSfx('hover');
+  }
+});
+
+$('endBtn').onclick = endDay;
+
+function endDay() {
+  if (busy || S.over || S.processedDays[S.day]) return;
+  S.processedDays[S.day] = true;
+  busy = true; $('endBtn').disabled = true;
+  AudioMgr.playStormAtmosphere(false);
+  AudioMgr.playSfx('nextSol');
+  var d = S.day, sc = cur(), a = S.alloc, sp = spent();
+  var rec = { d: d, inc: income(), b: S.batt, a: { life: a.life, food: a.food, shield: a.shield, sci: a.sci }, w: sc.w, f: sc.f, late: sc.late };
+  
+  var st = $('stage'); if (st) { st.classList.remove('shake'); void st.offsetWidth; st.classList.add('shake'); }
+  sky('day');
+
+  setTimeout(function(){
+    var diffMult = DIFFS[difficulty] || DIFFS.normal;
+
+    S.batt = Math.min(R.cap, S.batt + rec.inc - sp);
+    var lifeDelta = (a.life - R.lifeNeed) * R.lifeRate * (diffMult.lifeDrainMult);
+    S.life = Math.min(100, S.life + lifeDelta);
+    
+    var foodDelta = ((a.food - R.foodNeed) * R.foodRate - R.foodDrain) * (diffMult.foodDrainMult);
+    S.food = Math.min(100, S.food + foodDelta);
+    
+    var radBase = Math.max(0, R.doseBase - a.shield) * diffMult.radMult;
+    S.dose += radBase;
+    S.sci += a.sci * R.sci;
+
+    if (sc.f) {
+      var flareRad = Math.round(sc.f.spike * (1 - R.cut * a.shield) * diffMult.radMult);
+      S.dose += flareRad;
+      var f = $('flash'); if (f) { f.classList.remove('fl'); void f.offsetWidth; f.classList.add('fl'); }
+      var sh = $('shield'); if (sh) sh.setAttribute('stroke-opacity', 1);
+      addNotif('Solar Flare Impacted', 'Flare class ' + sc.f.cls + ' hit Gale Crater. Radiation dose increased.', 'Solar Flare', S.day);
+      AudioMgr.playSfx('flare');
+    }
+    S.life = Math.max(0, S.life); S.food = Math.max(0, S.food);
+    rec.after = { life: S.life, food: S.food, dose: S.dose, batt: S.batt };
+
+    if (S.dose >= 100) { S.dose = 100; S.fail = 'dose'; }
+    else if (S.life <= 0) { S.fail = 'life'; }
+    else if (S.food <= 0) { S.fail = 'food'; }
+
+    S.log.push(rec); if (S.fail) S.over = true;
+    sky('dusk'); render();
+    setTimeout(function(){ postcard(rec); }, T(1500));
+  }, T(800));
+}
+
+function fact(rec) {
+  var k;
+  if (rec.f) k = rec.f.cls === 'X9.0' ? 'x9' : 'xc';
+  else if (rec.w === 'storm') k = rec.d % 2 ? 'opp' : 'cur';
+  else k = ['rad', 'sol', 'moxie', 'iss', 'max'][rec.d % 5];
+  return FACTS[k];
+}
+
+function pmsg(r) {
+  var a = r.a;
+  if (r.f) return r.late ? 'Earth message arrived late! Good thing we prepared.' : a.shield >= 2 ? 'Solar flare blocked successfully by our shields! Great teamwork.' : 'That flare was intense! We need stronger shielding next time.';
+  if (r.w === 'storm') return S.batt > 0 ? 'Severe dust storm! Panels resting, battery holding strong.' : 'Dust storm hit hard and battery is empty!';
+  if (r.w === 'hazy') return 'Hazy skies today. Solar panels generating moderate power.';
+  if (a.sci > 0) return 'Conducted geological surveys near Mount Sharp!';
+  return 'A gorgeous sunny sol on Mars. All systems green!';
+}
+
+function postcard(r) {
+  if (S.generatedPostcards[r.d]) {
+    if (S.over || S.day >= 10) { report(); } else { S.day++; dawn(); }
+    return;
+  }
+  S.generatedPostcards[r.d] = true;
+
+  var f = fact(r), m = pmsg(r), sk = r.w === 'storm' ? '#d9785a' : r.w === 'hazy' ? '#e9a56e' : '#ffb703';
+  S.cards.push({ d: r.d, m: m });
+  addNotif('Sol ' + r.d + ' Logged', 'Daily postcard and science review recorded.', 'Mission Achievements', r.d);
+  AudioMgr.playSfx('postcardFlip');
+
+  $('pf').innerHTML = '<svg viewBox="0 0 400 130"><rect width="400" height="130" fill="' + sk + '"/><path d="M60 100 L130 40 L175 28 L230 48 L300 100Z" fill="#c1582a"/><path d="M0 100 Q100 85 200 100 T400 96 V130H0Z" fill="#a14c27"/><path d="M230 112 a34 30 0 0 1 68 0Z" fill="#fdf6e2"/><g transform="translate(110,86) scale(.28)"><use href="#pb"/></g></svg><div class="stamp">SOL<br>' + r.d + '</div><div class="pm">GALE CRATER<br>SOL ' + r.d + '</div><div class="hw">' + m + '</div><div class="ss"><span>INCOME ' + r.inc + '</span><span>BATTERY ' + S.batt + '</span><span>RADIATION ' + Math.round(S.dose) + '</span><span>SCIENCE ' + S.sci + '</span></div>';
+  $('pb2').innerHTML = '<h3>EARTH TRANSMISSION:</h3><p>' + (S.em ? S.em.text : '') + (S.em && S.em.late ? ' <span class="late">DELAYED</span>' : '') + '</p><h3>NASA SCIENCE DISCOVERY:</h3><p>' + (r.f ? 'Flare class ' + r.f.cls + ' (' + r.f.date + '). ' : '') + f.t + '</p><p class="src">Source: ' + f.s + ' · <b>VERIFIED SNAPSHOT</b></p><p style="margin-top:6px"><b>To:</b> Earth Mission Control · <b>From:</b> ' + pipName + '</p>';
+  
+  $('flip').classList.remove('b'); $('pov').classList.add('on');
+  $('nextDay').textContent = S.over || S.day >= 10 ? 'VIEW FINAL MISSION REPORT' : 'PROCEED TO NEXT SOL';
+}
+
+$('flip').onclick = function(){ AudioMgr.playSfx('postcardFlip'); this.classList.toggle('b'); };
+$('nextDay').onclick = function(){
+  AudioMgr.playSfx('nextSol');
+  $('pov').classList.remove('on');
+  if (S.over || S.day >= 10) { report(); return; }
+  S.day++; dawn();
+};
+
+function bb() {
+  var k = S.fail, nm = { life: 'Life Support', food: 'Food Production', shield: 'Radiation Shield' };
+  var dust = S.log.filter(function(l){ return l.w === 'storm'; });
+  var fl = S.log.filter(function(l){ return l.f; }).pop();
+  var need = { life: 2, food: 1, shield: 1 };
+  var sk = k === 'dose' ? 'shield' : k;
+  var low = S.log.filter(function(l){ return l.a[sk] < need[sk]; }).length;
+  var c = [];
+
+  if (k === 'dose') {
+    c.push(['☀️', fl ? 'A powerful solar flare (' + fl.f.cls + ') struck on sol ' + fl.d + '.' : 'Cumulative cosmic radiation accumulated.']);
+    c.push(['🛡️', fl ? 'Shield power was insufficient during the event.' : 'Shield allocation was left too low.']);
+    c.push(['☢️', 'Radiation dosage reached critical 100 mSv limit.']);
+  } else {
+    c.push([dust.length ? '🌪️' : '📉', dust.length ? 'Dust storm reduced solar power income.' : 'High daily resource drain without adequate reserves.']);
+    if (dust.length) c.push(['🔋', 'Battery held ' + dust[0].b + ' coin(s) when the storm started.']);
+    c.push(['🪙', nm[sk] + ' received under-allocated power for ' + low + ' sol(s).']);
+    c.push([k === 'life' ? '🫧' : '🌿', (k === 'life' ? 'Oxygen and thermal life support' : 'Greenhouse crop yields') + ' collapsed.']);
+  }
+  
+  var tip = '';
+  if (k === 'life') {
+    tip = 'Keep 2 coins on Life Support daily to maintain oxygen and thermal stability.';
+  } else if (k === 'food') {
+    tip = 'Plan Food before storms arrive so supplies do not run dry.';
+  } else {
+    tip = 'Use Shield 3 on flare days. Earth warnings may be late, so keep spare coin in your battery!';
+  }
+  return { c: c, tip: tip };
+}
+
+function report() {
+  var rep = $('rep'), repC = $('repC'), h = '';
+  rep.classList.add('on');
+  
+  var survivedDays = S.log.length;
+  var badges = [];
+  if (S.dose < 40) badges.push('Careful Guardian');
+  if (S.batt >= 8) badges.push('Efficient Planner');
+  if (S.sci >= 120) badges.push('Science Star');
+  if (badges.length === 0 || S.fail) badges.push('Daring Cadet');
+
+  var primaryBadge = badges[0];
+  var postcardBonus = survivedDays * 50;
+  var finalScore = (survivedDays * 100) + S.sci + (S.batt * 5) + postcardBonus;
+
+  saveScore(pipName, finalScore, primaryBadge);
+  var leaderboard = getLeaderboard();
+
+  if (S.fail) {
+    AudioMgr.playSfx('paused');
+    var b = bb();
+    h = '<h2>' + pipName + ' IS SAFE · MISSION PAUSED</h2>' +
+        '<p>Mission result: <b>Safely Evacuated on Sol ' + S.day + '</b></p>' +
+        '<p>Total Survived Sols: <b>' + survivedDays + ' / 10</b> · Final Radiation: <b>' + Math.round(S.dose) + ' mSv</b></p>' +
+        '<h2 style="font-size:15px;margin-top:12px">BLACK BOX CAUSE CHAIN</h2>' +
+        '<ul class="chain">' + b.c.map(function(x){ return '<li><span class="i">' + x[0] + '</span>' + x[1] + '</li>'; }).join('') + '</ul>' +
+        '<p class="panel" style="margin-top:12px">💡 <b>Contextual Survival Hint:</b> ' + b.tip + '</p>';
+  } else {
+    AudioMgr.playSfx('badge');
+    h = '<h2>MISSION COMPLETE! 🎉</h2>' +
+        '<p>Mission result: <b>Successfully Completed 10 Sols</b></p>' +
+        '<div style="text-align:center;margin:15px 0"><div class="patch">🏆 BADGES UNLOCKED: ' + badges.join(', ') + ' 🏆</div></div>' +
+        '<p style="text-align:center">Final Score Breakdown:<br>' +
+        '• Survived Days (' + survivedDays + ' × 100): +' + (survivedDays * 100) + '<br>' +
+        '• Discovery Points: +' + S.sci + '<br>' +
+        '• Remaining Battery (' + S.batt + ' × 5): +' + (S.batt * 5) + '· Postcard Bonus (' + survivedDays + ' × 50): +' + postcardBonus + '<br>' +
+        '<b>Total Final Score: ' + finalScore + '</b></p>';
+  }
+
+  h += '<h2 style="font-size:16px;margin-top:20px;color:var(--sun)">🏆 LEADERBOARD (TOP ASTRONAUTS)</h2>' +
+       '<table><thead><tr><th>Rank</th><th>Astronaut</th><th>Score</th><th>Badge</th></tr></thead><tbody>';
+  leaderboard.forEach(function(entry, idx){
+    h += '<tr><td>#' + (idx + 1) + '</td><td>' + entry.name + '</td><td><b>' + entry.score + '</b></td><td>' + entry.badge + '</td></tr>';
+  });
+  h += '</tbody></table>';
+
+  h += '<h2 style="font-size:15px;margin-top:16px">POSTCARD SCRAPBOOK ARCHIVE</h2><div class="scrap">' + S.cards.map(function(c){ return '<div><b>SOL ' + c.d + '</b><br>' + c.m + '</div>'; }).join('') + '</div>';
+
+  repC.innerHTML = h + '<div class="hb"><button class="btn" id="again">PLAY NEW MISSION</button><button class="btn sec" id="rhome">MAIN MENU</button></div>';
+  $('again').onclick = function(){ AudioMgr.playSfx('click'); rep.classList.remove('on'); brief(isFixedMissionMode); };
+  $('rhome').onclick = function(){ AudioMgr.playSfx('click'); rep.classList.remove('on'); home(); };
+}
+
+boot();
+})();
+</script>
+</body>
+</html>

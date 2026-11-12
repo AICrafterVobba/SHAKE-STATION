@@ -1,0 +1,57 @@
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+html {
+  scroll-padding-top: env(safe-area-inset-top, 0px);
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at 50% 20%, #151b3b 0%, var(--space) 70%);
+  color: #fff;
+  font: 16px/1.6 Nunito, system-ui, -apple-system, "Segoe UI", sans-serif;
+  overflow: hidden;
+  height: 100vh;
+}
+
+h1, h2, h3, button, .o {
+  font-family: Orbitron, "Exo 2", sans-serif;
+  letter-spacing: .08em;
+}
+
+button {
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+}
+
+button:focus-visible, input:focus-visible {
+  outline: 3px solid var(--sun);
+  outline-offset: 3px;
+  box-shadow: 0 0 12px var(--sun);
+}
+
+.scr {
+  position: fixed;
+  inset: 0;
+  display: none;
+  overflow: auto;
+  padding: calc(20px + env(safe-area-inset-top, 0px)) 20px calc(20px + env(safe-area-inset-bottom, 0px));
+  background: radial-gradient(circle, rgba(255,255,255,.04) 1px, transparent 1.5px) 0 0/10px 10px, radial-gradient(ellipse at 50% 0, #18224c, var(--space) 70%);
+}
+
+.scr.on {
+  display: block;
+  animation: iris .4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes iris {
+  from { clip-path: circle(0% at 50% 50%); opacity: 0; }
+  to { clip-path: circle(150% at 50% 50%); opacity: 1; }
+}
+
+body.rm * {
+  animation-duration: .01s !important;
+  transition-duration: .01s !important;
+}
